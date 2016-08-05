@@ -43,6 +43,26 @@ plot(rTetra)
 points(tetraploid)
 writeRaster(rTetra, "models/tetraploid_Callisia.grd")
 
+# more complicated maxent modeling for diploids
+maxAdvanced1 <- maxent(predictors, diploid, args=c("randomseed=true", "replicatetype=crossvalidate", "replicates=640", "-J")) # takes much longer, but includes cross validation, random seed, runs jacknife
+maxAdvanced1 # views results in browser window
+response(maxAdvanced1) # show response curves for each layer
+rDip <- predict(maxAdvanced1, predictors) # create model
+plot(rDip)
+points(diploid)
+writeRaster(rDip, "models/diploid_Callisia1.grd")
+
+
+# more complicated maxent modeling for tetraploids
+maxAdvanced2 <- maxent(predictors, tetraploid, args=c("randomseed=true", "replicatetype=crossvalidate", "replicates=640", "-J")) # takes much longer, but includes cross validation, random seed, runs jacknife
+maxAdvanced2 # views results in browser window
+response(maxAdvanced2) # show response curves for each layer
+rTetra <- predict(maxAdvanced2, predictors) # create model 
+plot(rTetra)
+points(tetraploid)
+writeRaster(rTetra, "models/tetraploid_Callisia2.grd")
+
+
 ##nicheOverlap analysis
 # read in models (raster)
 rDip <- raster("models/diploid.grd")
