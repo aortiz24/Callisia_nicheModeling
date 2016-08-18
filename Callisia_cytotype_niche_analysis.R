@@ -11,7 +11,7 @@ library(dplyr)
 library(rJava)
 
 # import occurrence data and convert to format required by maxent
-Callisia.both <- read.csv(file="taxaData/CallisiaCompletedData.csv") %>%
+Callisia.both <- read.csv(file="CallisiaCompletedData.csv") %>%
   select(Cytotype,Latitude,Longitude)
 Callisia.both <- na.omit(Callisia.both)
 diploid <- Callisia.both %>%
@@ -32,7 +32,8 @@ response(maxDip) # show response curves for each layer
 rDip <- predict(maxDip, predictors) # create model
 plot(rDip)
 points(diploid)
-writeRaster(rDip, "models/diploid_Callisia.grd")
+dir.create("models") #create directory called models
+writeRaster(rDip, "models/diploid_Callisia.grd") # plots 
 
 # run maxent for tetraploid (default parameters)
 maxTetra <- maxent(predictors, tetraploid) # run with default parameters
@@ -41,10 +42,10 @@ response(maxTetra) # show response curves for each layer
 rTetra <- predict(maxTetra, predictors) # create model 
 plot(rTetra)
 points(tetraploid)
-writeRaster(rTetra, "models/tetraploid_Callisia.grd")
+writeRaster(rTetra, "models/tetraploid_Callisia.grd") # plots 
 
 # more complicated maxent modeling for diploids
-maxAdvanced1 <- maxent(predictors, diploid, args=c("randomseed=true", "replicatetype=crossvalidate", "replicates=640", "-J")) # takes much longer, but includes cross validation, random seed, runs jacknife
+maxAdvanced1 <- maxent(predictors, diploid, args=c("randomseed=true", "replicatetype=crossvalidate","replicates=10","-J","-P"))# takes much longer, but includes o=output directory, m=number of replications, k-fold cross validation(k=10), random seed, runs jacknife
 maxAdvanced1 # views results in browser window
 response(maxAdvanced1) # show response curves for each layer
 rDip <- predict(maxAdvanced1, predictors) # create model
@@ -54,7 +55,7 @@ writeRaster(rDip, "models/diploid_Callisia1.grd")
 
 
 # more complicated maxent modeling for tetraploids
-maxAdvanced2 <- maxent(predictors, tetraploid, args=c("randomseed=true", "replicatetype=crossvalidate", "replicates=640", "-J")) # takes much longer, but includes cross validation, random seed, runs jacknife
+maxAdvanced2 <- maxent(predictors, tetraploid, args=c("randomseed=true", "replicatetype=crossvalidate", "replicates=10", "J","P")) # takes much longer, but includes cross validation, random seed, runs jacknife
 maxAdvanced2 # views results in browser window
 response(maxAdvanced2) # show response curves for each layer
 rTetra <- predict(maxAdvanced2, predictors) # create model 
