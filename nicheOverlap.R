@@ -5,6 +5,7 @@ library(raster)
 library(dismo)
 library(ecospat)
 library(ENMeval)
+library(car)
 
 ## multi-variate climate space comparisons (standard statistical testing, non-model based)
 # import occurrence data and convert to format required by maxent
@@ -46,11 +47,46 @@ aov.alt <- aov(alt ~ species, data=bothPts)
 summary(aov.alt)
 TukeyHSD(aov.alt)
 
-#for loop of one-way ANOVA with Tukey's post-hoc(for all uncorrelated weather variables)
-e<-bothPts
-for(i in e[,2:12]) {aov(i~ species,data=bothPts)}
+##for loop of one-way ANOVA with Tukey's post-hoc(for all 11 uncorrelated weather variables), make sure car package is loaded
+bothPts <- as.data.frame(rbind(dipPts, tetraPts))#save dataset(made previously in script)as object for ANOVA analysis
+bothPts #view dataset layout
+1:ncol(bothPts) #displays how many columns are in dataset
+AVz<- rep(NA,ncol(bothPts)) #creates a table called AVz with the same number of columns as the dataset. When it is created each cell will have an NA, then we will add data from the for loop in this table.
+sink("ANOVA-Tukey.doc")#creates a document called ANOVA-Tukey.doc in your working directory
+for (i in 2:ncol(bothPts)) {
+    column <-names(bothPts[i])
+    AVz<-summary(aov(bothPts[,i]~species, data=bothPts))
+    tk<-TukeyHSD((aov(bothPts[,i]~species, data=bothPts)))
+print(column)
+print(AVz)
+print(tk)
+}
+sink()
 
-# principle component analysis
+##this for loop conducted the ANOVA analysis and Tukey post hoc test and put them in the ANOVA-p-values.doc
+#sink is the command that allows you to put/print results in a document
+1:ncol(bothPts) #displays how many columns are in dataset
+AVy<- rep(NA,ncol(bothPts)) #creates a table called AVz with the same number of columns as the dataset. When it is created each cell will have an NA, then we will add data from the for loop in this table.
+sink("ANOVA-p-values.doc")#creates a document called ANOVA-p-values.doc in your working directory
+for (i in 2:ncol(bothPts)) {
+  column <-names(bothPts[i])
+  AVy<-summary(aov(bothPts[,i]~species, data=bothPts)) [[1]] [["Pr(>F)"]] #calculating the summary of ANOVA but only going to put/print the P-value that is greater than F in the ANOVA-p-values.doc 
+  print(column)
+  print(AVy)
+  }
+sink()
+#reformatting ANOVA-p-values.doc
+table2=read.csv(file.choose(),header=F)#select to open ANOVA-p-values.doc
+Marker<-table2[seq(from = 1, to = nrow(table2), by = 2), 1]
+pvalue<-table2[seq(from = 2, to = nrow(table2), by = 2), 1]
+dfNew<-data.frame(Marker,pvalue)
+write.csv(dfNew, file="p-value_table.csv")# open csv and using Find&Select then Replace, take out the [1] and NA from each column
+table3=read.csv(file.choose(),header=T)#choose the csv file you just editted
+table4=table3[table3$pvalue < 0.05,] #filtering pvalue column to include only pvalues < 0.05
+write.table(table4,file="One-WayANOVA-p-lessthan-05.doc", quote=FALSE,sep="\t")
+#go into your directory and save the ANOVA-Tukey.doc,ANOVA-p-values.doc, and One-WayANOVA-p-lessthan-05.doc as word documents. If you don't they will be erased when you run this code with other data
+
+# principle component analysis(PCA)
 bothNum <- bothPts[ ,-1] #remove species names
 pca_both <- prcomp(bothNum, center = TRUE, scale. = TRUE) #PCA
 print(pca_both) #print deviations and rotations
