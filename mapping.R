@@ -7,7 +7,7 @@ library(dismo)
 library(maptools) 
 
 ## load data with taxa in different R objects
-# import occurrence data and convert to the format required by maxent
+# import occurrence data and convert to format required by maxent
 Callisia.both <- read.csv(file="CallisiaCompletedData.csv") %>%
   select(Cytotype,Latitude,Longitude)
 Callisia.both <- na.omit(Callisia.both)
