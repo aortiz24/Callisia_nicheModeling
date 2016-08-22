@@ -15,12 +15,14 @@ library(rJava)
 dir.create("models")
 
 ## import occurrence data and convert to format required by maxent
-both <- read.csv(file="taxaData/bothTaxa.csv")
-diploid <- both %>%
-  filter(cytotype=="2X")
+Callisia.both <- read.csv(file="CallisiaCompletedData.csv") %>%
+  select(Cytotype,Latitude,Longitude)
+Callisia.both <- na.omit(Callisia.both)
+diploid <- Callisia.both %>%
+  filter(Cytotype=="2X")
 diploid <- diploid[,c(3,2)]
-tetraploid <- both %>%
-  filter(cytotype=="4X")
+tetraploid <- Callisia.both %>%
+  filter(Cytotype=="4X")
 tetraploid <- tetraploid[,c(3,2)]
 
 # import layers with CRS specified
