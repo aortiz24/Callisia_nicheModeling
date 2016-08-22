@@ -6,16 +6,17 @@ library(dplyr)
 library(dismo)
 library(maptools) 
 
-## load data with taxa in different files
-diploid <- read.csv(file="taxaData/taxa1.csv")
-tetraploid <- read.csv(file="taxaData/taxa2.csv")
-
-## load data with taxa in same files (does same thing as above, in different way)
-both <- read.csv(file="taxaData/bothTaxa.csv")
-diploid <- both %>%
-  filter(cytotype=="2X")
-tetraploid <- both %>%
-  filter(cytotype=="4X")
+## load data with taxa in different R objects
+# import occurrence data and convert to format required by maxent
+Callisia.both <- read.csv(file="CallisiaCompletedData.csv") %>%
+  select(Cytotype,Latitude,Longitude)
+Callisia.both <- na.omit(Callisia.both)
+diploid <- Callisia.both %>%
+  filter(Cytotype=="2X")
+diploid <- diploid[,c(3,2)]
+tetraploid <- Callisia.both %>%
+  filter(Cytotype=="4X")
+tetraploid <- tetraploid[,c(3,2)]
 
 ## quick and dirty plot on map (could also plot points first and add map)
 US(xlim=c(-85,-77), ylim=c(26,37))
