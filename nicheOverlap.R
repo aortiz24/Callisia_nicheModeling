@@ -54,7 +54,7 @@ bothPts <- as.data.frame(rbind(dipPts, tetraPts))#save dataset(made previously i
 bothPts #view dataset layout
 1:ncol(bothPts) #displays how many columns are in dataset
 AVz<- rep(NA,ncol(bothPts)) #creates a table called AVz with the same number of columns as the dataset. When it is created each cell will have an NA, then we will add data from the for loop in this table.
-sink("ANOVA-Tukey.doc")#creates a document called ANOVA-Tukey.doc in your working directory
+sink("ANOVA-Tukey.txt")#creates a text file called ANOVA-Tukey.txt in your working directory
 for (i in 2:ncol(bothPts)) {
     column <-names(bothPts[i])
     AVz<-summary(aov(bothPts[,i]~species, data=bothPts))
@@ -65,28 +65,28 @@ print(tk)
 }
 sink()
 
-##this for loop conducted the ANOVA analysis and Tukey post hoc test and put them in the ANOVA-p-values.doc
-#sink is the command that allows you to put/print results in a document
+##this for loop conducted the ANOVA analysis and Tukey post hoc test and put them in the ANOVA-p-values.txt
+#sink is the command that allows you to put/print results in a text file
 1:ncol(bothPts) #displays how many columns are in dataset
 AVy<- rep(NA,ncol(bothPts)) #creates a table called AVz with the same number of columns as the dataset. When it is created each cell will have an NA, then we will add data from the for loop in this table.
-sink("ANOVA-p-values.doc")#creates a document called ANOVA-p-values.doc in your working directory
+sink("ANOVA-p-values.txt")#creates a text file called ANOVA-p-values.txt in your working directory
 for (i in 2:ncol(bothPts)) {
   column <-names(bothPts[i])
-  AVy<-summary(aov(bothPts[,i]~species, data=bothPts)) [[1]] [["Pr(>F)"]] #calculating the summary of ANOVA but only going to put/print the P-value that is greater than F in the ANOVA-p-values.doc 
+  AVy<-summary(aov(bothPts[,i]~species, data=bothPts)) [[1]] [["Pr(>F)"]] #calculating the summary of ANOVA but only going to put/print the P-value that is greater than F in the ANOVA-p-values.txt 
   print(column)
   print(AVy)
   }
 sink()
-#reformatting ANOVA-p-values.doc
-table2=read.csv(file.choose(),header=F)#select to open ANOVA-p-values.doc
+#reformatting ANOVA-p-values.txt
+table2=read.csv(file.choose(),header=F)#select to open ANOVA-p-values.txt
 Marker<-table2[seq(from = 1, to = nrow(table2), by = 2), 1]
 pvalue<-table2[seq(from = 2, to = nrow(table2), by = 2), 1]
 dfNew<-data.frame(Marker,pvalue)
 write.csv(dfNew, file="p-value_table.csv")# open csv and using Find&Select then Replace, take out the [1] and NA from each column
 table3=read.csv(file.choose(),header=T)#choose the csv file you just editted
 table4=table3[table3$pvalue < 0.05,] #filtering pvalue column to include only pvalues < 0.05
-write.table(table4,file="One-WayANOVA-p-lessthan-05.doc", quote=FALSE,sep="\t")
-#go into your directory and save the ANOVA-Tukey.doc,ANOVA-p-values.doc, and One-WayANOVA-p-lessthan-05.doc as word documents. If you don't they will be erased when you run this code with other data
+write.table(table4,file="One-WayANOVA-p-lessthan-05.txt", quote=FALSE,sep="\t")
+#go into your directory and save the ANOVA-Tukey.txt,ANOVA-p-values.txt, and One-WayANOVA-p-lessthan-05.txt as text files. If you don't they will be erased when you run this code with other data
 
 # principle component analysis(PCA)
 bothNum <- bothPts[ ,-1] #remove species names
