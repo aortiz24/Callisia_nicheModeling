@@ -48,7 +48,7 @@ aov.alt <- aov(alt ~ species, data=bothPts)
 summary(aov.alt)
 TukeyHSD(aov.alt)
 
-##for loop of one-way ANOVA with Tukey's post-hoc(for all 11 uncorrelated weather variables), make sure car package is loaded
+##for loop of one-way ANOVA with Tukey's post-hoc(for all 11 uncorrelated weather variables)
 bothPts <- as.data.frame(rbind(dipPts, tetraPts))#save dataset(made previously in script)as object for ANOVA analysis
 bothPts #view dataset layout
 1:ncol(bothPts) #displays how many columns are in dataset
@@ -85,7 +85,7 @@ write.csv(dfNew, file="anova_results/p-value_table.csv")# open csv and using Fin
 table3=read.csv(file.choose(),header=T)#choose the csv file you just editted
 table4=table3[table3$pvalue < 0.05,] #filtering pvalue column to include only pvalues < 0.05
 write.table(table4,file="anova_results/One-WayANOVA-p-lessthan-05.txt", quote=FALSE,sep="\t")
-#go into your directory and save the ANOVA-Tukey.txt,ANOVA-p-values.txt, and One-WayANOVA-p-lessthan-05.txt as text files. If you don't they will be erased when you run this code with other data
+#go into your anova_results directory and save the ANOVA-Tukey.txt,ANOVA-p-values.txt, and One-WayANOVA-p-lessthan-05.txt as text files. If you don't they will be erased when you run this code with other data
 
 # principle component analysis(PCA)
 bothNum <- bothPts[ ,-1] #remove species names
