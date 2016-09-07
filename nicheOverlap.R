@@ -5,7 +5,6 @@ library(raster)
 library(dismo)
 library(ecospat)
 library(ENMeval)
-library(car)
 
 ## multi-variate climate space comparisons (standard statistical testing, non-model based)
 # import occurrence data and convert to format required by maxent
