@@ -53,7 +53,7 @@ bothPts <- as.data.frame(rbind(dipPts, tetraPts))#save dataset(made previously i
 bothPts #view dataset layout
 1:ncol(bothPts) #displays how many columns are in dataset
 AVz<- rep(NA,ncol(bothPts)) #creates a table called AVz with the same number of columns as the dataset. When it is created each cell will have an NA, then we will add data from the for loop in this table.
-sink("anova_results/ANOVA-Tukey.txt")#creates a text file called ANOVA-Tukey.txt in your working directory
+sink("anova_results/ANOVA-Tukey.txt")#creates a text file called ANOVA-Tukey.txt in your anova_results directory
 for (i in 2:ncol(bothPts)) {
     column <-names(bothPts[i])
     AVz<-summary(aov(bothPts[,i]~species, data=bothPts))
@@ -68,7 +68,7 @@ sink()
 #sink is the command that allows you to put/print results in a text file
 1:ncol(bothPts) #displays how many columns are in dataset
 AVy<- rep(NA,ncol(bothPts)) #creates a table called AVz with the same number of columns as the dataset. When it is created each cell will have an NA, then we will add data from the for loop in this table.
-sink("anova_results/ANOVA-p-values.txt")#creates a text file called ANOVA-p-values.txt in your working directory
+sink("anova_results/ANOVA-p-values.txt")#creates a text file called ANOVA-p-values.txt in your anova_results directory
 for (i in 2:ncol(bothPts)) {
   column <-names(bothPts[i])
   AVy<-summary(aov(bothPts[,i]~species, data=bothPts)) [[1]] [["Pr(>F)"]] #calculating the summary of ANOVA but only going to put/print the P-value that is greater than F in the ANOVA-p-values.txt 
