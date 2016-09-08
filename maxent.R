@@ -232,7 +232,7 @@ writeRaster(rTetra0, "models/tetraploid1930.grd")
 
 ## Advanced modeling
 # develop testing and training sets for diploid
-fold0 <- kfold(diploid, k=5) #split occurence points into 5 sets
+fold <- kfold(diploid, k=5) #split occurence points into 5 sets
 dipTest0 <- diploid[fold == 1, ] #take 20% (1/5) for testing
 dipTrain0 <- diploid[fold != 1, ] #leave 40% for training
 # fit training model for diploid
@@ -280,7 +280,7 @@ maxDipAdv0 <- maxent(
 maxDipAdv0 #view output as html
 
 # develop testing and training sets for tetraploid
-fold0 <- kfold(tetraploid, k=5) #split occurence points into 5 sets
+fold <- kfold(tetraploid, k=5) #split occurence points into 5 sets
 tetraTest0 <- tetraploid[fold == 1, ] #take 20% (1/5) for testing
 tetraTrain0 <- tetraploid[fold != 1, ] #leave 40% for training
 # fit training model for tetraploid
@@ -367,7 +367,7 @@ writeRaster(rTetra1, "models/tetraploid2014.grd")
 
 ## Advanced modeling
 # develop testing and training sets for diploid
-fold1 <- kfold(diploid, k=5) #split occurence points into 5 sets
+fold <- kfold(diploid, k=5) #split occurence points into 5 sets
 dipTest1 <- diploid[fold == 1, ] #take 20% (1/5) for testing
 dipTrain1 <- diploid[fold != 1, ] #leave 40% for training
 # fit training model for diploid
@@ -415,7 +415,7 @@ maxDipAdv1 <- maxent(
 maxDipAdv1 #view output as html
 
 # develop testing and training sets for tetraploid
-fold1 <- kfold(tetraploid, k=5) #split occurence points into 5 sets
+fold <- kfold(tetraploid, k=5) #split occurence points into 5 sets
 tetraTest1 <- tetraploid[fold == 1, ] #take 20% (1/5) for testing
 tetraTrain1 <- tetraploid[fold != 1, ] #leave 40% for training
 # fit training model for tetraploid
