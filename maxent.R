@@ -265,7 +265,8 @@ testp0 <- predict(maxDipTrain0, pvtest0)
 testa0 <- predict(maxDipTrain0, avtest0)
 maxDipTest30 <- evaluate(p=testp0, a=testa0)
 maxDipTest30
-# maxent with jackknife, random seed, and response curves, followed by cross-validation
+# maxent with jackknife, random seed, and response curves, followed by cross
+#jackknife not run because only one layer in predictor0
 maxDipAdv0 <- maxent(
   x=predictors0,
   p=diploid,
@@ -275,7 +276,6 @@ maxDipAdv0 <- maxent(
     'randomseed=true', #default=false
     'threads=2', #default=1
     'responsecurves=true', #default=false
-    'jackknife=true', #default=false
     'replicates=10', #default=1
     'replicatetype=crossvalidate',
     'maximumiterations=1000' #default=500
@@ -314,6 +314,7 @@ testa0 <- predict(maxTetraTrain0, avtest0)
 maxTetraTest30 <- evaluate(p=testp0, a=testa0)
 maxTetraTest30
 # maxent with jackknife, random seed, and response curves, followed by cross-validation
+#jackknife not run because only one layer in predictor0
 maxTetraAdv0 <- maxent(
   x=predictors0,
   p=tetraploid,
@@ -323,7 +324,6 @@ maxTetraAdv0 <- maxent(
     'randomseed=true', #default=false
     'threads=2', #default=1
     'responsecurves=true', #default=false
-    'jackknife=true', #default=false
     'replicates=10', #default=1
     'replicatetype=crossvalidate',
     'maximumiterations=1000' #default=500
