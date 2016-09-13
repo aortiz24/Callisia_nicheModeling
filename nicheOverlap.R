@@ -56,10 +56,13 @@ dipPts1 <- raster::extract(predictors1, diploid)
 dipPts1 <- cbind.data.frame(species="diploid", dipPts1) #add column for diploid
 tetraPts <- raster::extract(predictors, tetraploid)
 tetraPts <- cbind.data.frame(species="tetraploid", tetraPts)
+tetraPts<-na.omit(tetraPts)#removing NA values
 tetraPts0 <- raster::extract(predictors0, tetraploid)
 tetraPts0 <- cbind.data.frame(species="tetraploid", tetraPts0)
+tetraPts0<-na.omit(tetraPts0)#removing NA values
 tetraPts1 <- raster::extract(predictors1, tetraploid)
 tetraPts1 <- cbind.data.frame(species="tetraploid", tetraPts1)
+tetraPts1<-na.omit(tetraPts1)#removing NA values
 
 # combine diploid and tetraploid
 bothPts <- as.data.frame(rbind(dipPts, tetraPts))
