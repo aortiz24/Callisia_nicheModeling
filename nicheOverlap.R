@@ -18,6 +18,8 @@ tetraploid <- Callisia.both %>%
   filter(Cytotype=="4X")
 tetraploid <- tetraploid[,c(3,2)]
 
+#layers ending in 0 are for PRISM1930
+#layers ending in 1 are for PRISM2014
 # import layers with CRS specified
 CRS <- "+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs"
 alt <- raster("layers/alt.asc", crs=CRS)
