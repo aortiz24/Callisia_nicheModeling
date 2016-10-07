@@ -17,6 +17,8 @@ diploid <- diploid[,c(3,2)]
 tetraploid <- Callisia.both %>%
   filter(Cytotype=="4X")
 tetraploid <- tetraploid[,c(3,2)]
+#deleting rows whose points are outside of SEstates object
+tetraploid<- tetraploid[-c(10,46,56), ]
 
 ## quick and dirty plot on map (could also plot points first and add map)
 US(xlim=c(-85,-77), ylim=c(26,37))

@@ -17,6 +17,8 @@ diploid <- diploid[,c(3,2)]
 tetraploid <- Callisia.both %>%
   filter(Cytotype=="4X")
 tetraploid <- tetraploid[,c(3,2)]
+#deleting rows whose points are outside of SEstates object
+tetraploid<- tetraploid[-c(10,46,56), ]
 
 #layers ending in 0 are for PRISM1930
 #layers ending in 1 are for PRISM2014
