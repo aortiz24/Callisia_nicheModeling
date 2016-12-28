@@ -1,4 +1,4 @@
-## making maps and preparing shapefiles
+### making maps and preparing shapefiles
 
 ## load libraries
 library(fields)
