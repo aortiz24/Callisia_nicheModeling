@@ -175,5 +175,15 @@ rTetra1 <- raster("models/tetraploid2014.grd")
 nicheOverlap(rDip1, rTetra1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rDip1, rTetra1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
 
+#assessing changes in diploid niche from 1930 to 2014
+nicheOverlap(rDip0, rDip1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rDip0, rDip1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+
+#assessing changes in tetraploid niche from 1930 to 2014
+nicheOverlap(rTetra0, rTetra1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rTetra0, rTetra1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+
 # assessing niche equivalency
 #nicheEquivalency()
