@@ -26,6 +26,11 @@ tetraploid <- Callisia.both %>%
 tetraploid <- tetraploid[,c(3,2)]
 #deleting rows whose points are outside of SEstates object
 tetraploid<- tetraploid[-c(10,46,56), ]
+#occurrence data for both Callisia cytotypes
+Callisia.both <- read.csv(file="CallisiaCompletedData.csv") %>%
+  select(Cytotype,Latitude,Longitude)
+both <- Callisia.both[,c(3,2)]
+both <- na.omit(both)
 
 #layers ending in 0 are for PRISM1930
 #layers ending in 1 are for PRISM2014
@@ -80,6 +85,15 @@ tetraBCpredict <- predict(predictors, tetraBC)
 # plot bioclim model
 plot(tetraBCpredict)
 
+# extract layer data for each point
+bothPts <- extract(predictors, both)
+# create bioclim model
+bothBC <- bioclim(bothPts)
+# predict bioclim model
+bothBCpredict <- predict(predictors, bothBC)
+# plot bioclim model
+plot(bothBCpredict)
+
 ## Default maxent modeling
 # run maxent for diploid (default parameters for dismo)
 maxDip <- maxent(predictors, diploid)
@@ -98,6 +112,15 @@ rTetra <- predict(maxTetra, predictors)
 plot(rTetra)
 points(tetraploid)
 writeRaster(rTetra, "models/tetraploid.grd")
+
+# run maxent for both cytotypes (default parameters for dismo)
+maxBoth <- maxent(predictors, both)
+maxBoth # views results in browser window
+response(maxBoth) # show response curves for each layer
+rBoth <- predict(maxBoth, predictors) # create model
+plot(rBoth) # plot predictive model
+points(both) # add points to predictive model
+writeRaster(rBoth, "models/both.grd")
 
 ## Advanced modeling
 # develop testing and training sets for diploid
@@ -195,6 +218,54 @@ maxTetraAdv <- maxent(
   )
 )
 maxTetraAdv #view output as html
+
+# develop testing and training sets for both cytotypes
+fold <- kfold(both, k=5) #split occurence points into 5 sets
+bothTest <- both[fold == 1, ] #take 20% (1/5) for testing
+bothTrain <- both[fold != 1, ] #leave 40% for training
+# fit training model for diploid
+maxBothTrain <- maxent(predictors, bothTrain) #fit maxent model
+maxBothTrain #view results in html
+rBothTrain <- predict(maxBothTrain, predictors) #predict full model
+plot(rBothTrain) #visualize full model
+points(both) #add points to plot
+# testing model for diploid
+# extract background points
+bg <- randomPoints(predictors, 1000)
+# cross-validate model for diploid
+maxBothTest <- evaluate(maxBothTrain, p=bothTest, a=bg, x=predictors)
+maxBothTest #print results
+threshold(maxBothTest) #identify threshold for presence or absence
+plot(maxBothTest, 'ROC') #plot AUC
+# alternative methods for testing models (should give same answers)
+# Alternative 1: another way to test model for diploid
+pvtest <- data.frame(extract(predictors, bothTest))
+avtest <- data.frame(extract(predictors, bg))
+# cross-validate model
+maxBothTest2 <- evaluate(maxBothpTrain, p=pvtest, a=avtest)
+maxBothTest2
+# Alternative 2: predict to testing points for diploid
+testp <- predict(maxBothTrain, pvtest)
+testa <- predict(maxBothTrain, avtest)
+maxBothTest3 <- evaluate(p=testp, a=testa)
+maxBothTest3
+# maxent with jackknife, random seed, and response curves, followed by cross-validation
+maxBothAdv <- maxent(
+  x=predictors,
+  p=diploid,
+  removeDuplicates=TRUE,
+  nbg=10000,
+  args=c(
+    'randomseed=true', #default=false
+    'threads=2', #default=1
+    'responsecurves=true', #default=false
+    'jackknife=true', #default=false
+    'replicates=10', #default=1
+    'replicatetype=crossvalidate',
+    'maximumiterations=1000' #default=500
+  )
+)
+maxBothAdv #view output as html
 
 ### basic bioclim modeling with PRISM 1930 layers for diploids then tetraploids
 # extract layer data for each point
