@@ -105,7 +105,7 @@ ncomp <- 8 #specify number of components to load (representing 99% of variation)
 # read in default maxent models
 rDip <- raster("models/diploid.grd")
 rTetra <- raster("models/tetraploid.grd")
-# assessing niche overlap
+# assessing niche overlap by comparing diploids and tetraploids using BioClim layers
 nicheOverlap(rDip, rTetra, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rDip, rTetra, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
 
@@ -138,7 +138,7 @@ ncomp <- 1#specify number of components to load (representing 99% of variation)=
 # read in default maxent models
 rDip0 <- raster("models/diploid1930.grd")
 rTetra0 <- raster("models/tetraploid1930.grd")
-# assessing niche overlap
+# assessing niche overlap by comparing diploids and tetraploids in 1930
 nicheOverlap(rDip0, rTetra0, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rDip0, rTetra0, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
 
@@ -171,7 +171,7 @@ ncomp <- 2 #specify number of components to load (representing 99% of variation)
 # read in default maxent models
 rDip1 <- raster("models/diploid2014.grd")
 rTetra1 <- raster("models/tetraploid2014.grd")
-# assessing niche overlap
+# assessing niche overlap by comparing diploids and tetraploids in 2014
 nicheOverlap(rDip1, rTetra1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rDip1, rTetra1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
 
@@ -182,6 +182,15 @@ nicheOverlap(rDip0, rDip1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statist
 #assessing changes in tetraploid niche from 1930 to 2014
 nicheOverlap(rTetra0, rTetra1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rTetra0, rTetra1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+#assessing changes in diploid niche from BioClim to 2014
+nicheOverlap(rDip, rDip1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rDip, rDip1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+#assessing changes in tetraploid niche from BioClim to 2014
+nicheOverlap(rTetra, rTetra1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rTetra, rTetra1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
 
 # assessing niche equivalency
 #nicheEquivalency()
