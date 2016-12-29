@@ -286,6 +286,15 @@ tetraBCpredict0 <- predict(predictors0, tetraBC0)
 # plot bioclim model
 plot(tetraBCpredict0)
 
+# extract layer data for each point for both cytotypes
+bothPts0 <- extract(predictors0, both)
+# create bioclim model
+bothBC0 <- bioclim(bothPts0)
+# predict bioclim model
+bothBCpredict0 <- predict(predictors0, bothBC0)
+# plot bioclim model
+plot(bothBCpredict0)
+
 ## Default maxent modeling
 # run maxent for diploid (default parameters for dismo)
 maxDip0 <- maxent(predictors0, diploid)
@@ -304,6 +313,15 @@ rTetra0 <- predict(maxTetra0, predictors0)
 plot(rTetra0)
 points(tetraploid)
 writeRaster(rTetra0, "models/tetraploid1930.grd")
+
+# run maxent for both cytotypes (default parameters for dismo)
+maxBoth0 <- maxent(predictors0, both)
+maxBoth0 # views results in browser window
+response(maxBoth0) # show response curves for each layer
+rBoth0 <- predict(maxBoth0, predictors0) # create model
+plot(rBoth0) # plot predictive model
+points(both) # add points to predictive model
+writeRaster(rBoth0, "models/both1930.grd")
 
 ## Advanced modeling
 # develop testing and training sets for diploid
@@ -402,6 +420,54 @@ maxTetraAdv0 <- maxent(
 )
 maxTetraAdv0 #view output as html
 
+# develop testing and training sets for both cytotypes
+fold <- kfold(both, k=5) #split occurence points into 5 sets
+bothTest0 <- both[fold == 1, ] #take 20% (1/5) for testing
+bothTrain0 <- both[fold != 1, ] #leave 40% for training
+# fit training model for both cytotypes
+maxBothTrain0 <- maxent(predictors0, BothTrain0) #fit maxent model
+maxBothTrain0 #view results in html
+rBothTrain0 <- predict(maxBothTrain0, predictors0) #predict full model
+plot(rBothTrain0) #visualize full model
+points(both) #add points to plot
+# testing model for both cytotypes
+# extract background points
+bg0 <- randomPoints(predictors0, 1000)
+# cross-validate model for both cytotypes
+maxBothTest0 <- evaluate(maxBothTrain0, p=bothTest0, a=bg0, x=predictors0)
+maxBothTest0 #print results
+threshold(maxBothTest0) #identify threshold for presence or absence
+plot(maxBothTest0, 'ROC') #plot AUC
+# alternative methods for testing models (should give same answers)
+# Alternative 1: another way to test model for both cytotypes
+pvtest0 <- data.frame(extract(predictors0, bothTest0))
+avtest0 <- data.frame(extract(predictors0, bg0))
+# cross-validate model
+maxBothTest20 <- evaluate(maxBothTrain0, p=pvtest0, a=avtest0)
+maxBothTest20
+# Alternative 2: predict to testing points for both cytotypes
+testp0 <- predict(maxBothTrain0, pvtest0)
+testa0 <- predict(maxBothTrain0, avtest0)
+maxBothTest30 <- evaluate(p=testp0, a=testa0)
+maxBothTest30
+# maxent with jackknife, random seed, and response curves, followed by cross
+#jackknife not run because only one layer in predictor0
+maxBothAdv0 <- maxent(
+  x=predictors0,
+  p=both,
+  removeDuplicates=TRUE,
+  nbg=10000,
+  args=c(
+    'randomseed=true', #default=false
+    'threads=2', #default=1
+    'responsecurves=true', #default=false
+    'replicates=10', #default=1
+    'replicatetype=crossvalidate',
+    'maximumiterations=1000' #default=500
+  )
+)
+maxBothAdv0 #view output as html
+
 ### basic bioclim modeling with PRISM 2014 layers for diploids then tetraploids
 # extract layer data for each point
 dipPts1 <- extract(predictors1, diploid)
@@ -421,6 +487,15 @@ tetraBCpredict1 <- predict(predictors1, tetraBC1)
 # plot bioclim model
 plot(tetraBCpredict1)
 
+# extract layer data for each point of both cytotypes
+bothPts1 <- extract(predictors1, both)
+# create bioclim model
+bothBC1 <- bioclim(bothPts1)
+# predict bioclim model
+bothBCpredict1 <- predict(predictors1, bothBC1)
+# plot bioclim model
+plot(bothBCpredict1)
+
 ## Default maxent modeling
 # run maxent for diploid (default parameters for dismo)
 maxDip1 <- maxent(predictors1, diploid)
@@ -439,6 +514,15 @@ rTetra1 <- predict(maxTetra1, predictors1)
 plot(rTetra1)
 points(tetraploid)
 writeRaster(rTetra1, "models/tetraploid2014.grd")
+
+# run maxent for both cytotypes (default parameters for dismo)
+maxBoth1 <- maxent(predictors1, both)
+maxBoth1 # views results in browser window
+response(maxBoth1) # show response curves for each layer
+rBoth1 <- predict(maxBoth1, predictors1) # create model
+plot(rBoth1) # plot predictive model
+points(both) # add points to predictive model
+writeRaster(rBoth1, "models/both2014.grd")
 
 ## Advanced modeling
 # develop testing and training sets for diploid
@@ -536,3 +620,51 @@ maxTetraAdv1 <- maxent(
   )
 )
 maxTetraAdv1 #view output as html
+
+# develop testing and training sets for both cytotypes
+fold <- kfold(both, k=5) #split occurence points into 5 sets
+bothTest1 <- both[fold == 1, ] #take 20% (1/5) for testing
+bothTrain1 <- both[fold != 1, ] #leave 40% for training
+# fit training model for both cytotypes
+maxBothTrain1 <- maxent(predictors1, bothTrain1) #fit maxent model
+maxBothTrain1 #view results in html
+rBothTrain1 <- predict(maxBothTrain1, predictors1) #predict full model
+plot(rBothTrain1) #visualize full model
+points(both) #add points to plot
+# testing model for both cytotypes
+# extract background points
+bg1 <- randomPoints(predictors1, 1000)
+# cross-validate model for both cytotypes
+maxBothTest1 <- evaluate(maxBothTrain1, p=bothTest1, a=bg1, x=predictors1)
+maxBothTest1 #print results
+threshold(maxBothTest1) #identify threshold for presence or absence
+plot(maxBothTest1, 'ROC') #plot AUC
+# alternative methods for testing models (should give same answers)
+# Alternative 1: another way to test model for both cytotypes
+pvtest1 <- data.frame(extract(predictors1, bothTest1))
+avtest1 <- data.frame(extract(predictors1, bg1))
+# cross-validate model
+maxBothTest21 <- evaluate(maxBothTrain1, p=pvtest1, a=avtest1)
+maxBothTest21
+# Alternative 2: predict to testing points for both cytotypes
+testp1 <- predict(maxBothTrain1, pvtest1)
+testa1 <- predict(maxBothTrain1, avtest1)
+maxBothTest31 <- evaluate(p=testp1, a=testa1)
+maxBothTest31
+# maxent with jackknife, random seed, and response curves, followed by cross-validation
+maxBothAdv1 <- maxent(
+  x=predictors1,
+  p=both,
+  removeDuplicates=TRUE,
+  nbg=10000,
+  args=c(
+    'randomseed=true', #default=false
+    'threads=2', #default=1
+    'responsecurves=true', #default=false
+    'jackknife=true', #default=false
+    'replicates=10', #default=1
+    'replicatetype=crossvalidate',
+    'maximumiterations=1000' #default=500
+  )
+)
+maxBothAdv1 #view output as html
