@@ -183,7 +183,7 @@ nicheOverlap(rDip0, rDip1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statist
 nicheOverlap(rTetra0, rTetra1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rTetra0, rTetra1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
 
-#Rasters comparing BioClim to 2014 are not to the same extent
+#Error: raster objects comparing BioClim to 2014 are not to the same extent
 #assessing changes in diploid niche from BioClim to 2014
 nicheOverlap(rDip, rDip1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rDip, rDip1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
