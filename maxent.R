@@ -157,6 +157,11 @@ maxDipAdv0 <- maxent(
   )
 )
 maxDipAdv0 #view output as html
+response(maxDipAdv0) # show response curves for each layer
+rDipAdv0 <- predict(maxDipAdv0, predictors0) # create model
+plot(rDipAdv0) # plot predictive model
+points(diploid) # add points to predictive model
+writeRaster(rDipAdv0, "models/diploidAdv1930.grd")
 
 # develop testing and training sets for tetraploid
 fold <- kfold(tetraploid, k=5) #split occurence points into 5 sets
@@ -205,6 +210,11 @@ maxTetraAdv0 <- maxent(
   )
 )
 maxTetraAdv0 #view output as html
+response(maxTetraAdv0) # show response curves for each layer
+rTetraAdv0 <- predict(maxTetraAdv0, predictors0) # create model
+plot(rTetraAdv0) # plot predictive model
+points(tetraploid) # add points to predictive model
+writeRaster(rTetraAdv0, "models/tetraploidAdv1930.grd")
 
 # develop testing and training sets for both cytotypes
 fold <- kfold(both, k=5) #split occurence points into 5 sets
@@ -253,6 +263,11 @@ maxBothAdv0 <- maxent(
   )
 )
 maxBothAdv0 #view output as html
+response(maxBothAdv0) # show response curves for each layer
+rBothAdv0 <- predict(maxBothAdv0, predictors0) # create model
+plot(rBothAdv0) # plot predictive model
+points(tetraploid) # add points to predictive model
+writeRaster(rBothAdv0, "models/bothAdv1930.grd")
 
 ### basic bioclim modeling with PRISM 2014 layers for diploids then tetraploids
 # extract layer data for each point
@@ -358,6 +373,11 @@ maxDipAdv1 <- maxent(
   )
 )
 maxDipAdv1 #view output as html
+response(maxDipAdv1) # show response curves for each layer
+rDipAdv1 <- predict(maxDipAdv1, predictors1) # create model
+plot(rDipAdv1) # plot predictive model
+points(diploid) # add points to predictive model
+writeRaster(rDipAdv1, "models/diploidAdv2014.grd")
 
 # develop testing and training sets for tetraploid
 fold <- kfold(tetraploid, k=5) #split occurence points into 5 sets
@@ -406,6 +426,11 @@ maxTetraAdv1 <- maxent(
   )
 )
 maxTetraAdv1 #view output as html
+response(maxTetraAdv1) # show response curves for each layer
+rTetraAdv1 <- predict(maxTetraAdv1, predictors1) # create model
+plot(rTetraAdv1) # plot predictive model
+points(tetraploid) # add points to predictive model
+writeRaster(rTetraAdv1, "models/tetraploidAdv2014.grd")
 
 # develop testing and training sets for both cytotypes
 fold <- kfold(both, k=5) #split occurence points into 5 sets
@@ -454,3 +479,8 @@ maxBothAdv1 <- maxent(
   )
 )
 maxBothAdv1 #view output as html
+response(maxBothAdv1) # show response curves for each layer
+rBothAdv1 <- predict(maxBothAdv1, predictors1) # create model
+plot(rBothAdv1) # plot predictive model
+points(tetraploid) # add points to predictive model
+writeRaster(rBothAdv1, "models/bothAdv2014.grd")
