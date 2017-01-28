@@ -91,6 +91,15 @@ rBoth0<- raster("models/both1930.grd")
 nicheOverlap(rDip0, rTetra0, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rDip0, rTetra0, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
 
+# read in advanced maxent models
+rDipAdv0 <- raster("models/diploidAdv1930.grd")
+rTetraAdv0 <- raster("models/tetraploidAdv1930.grd")
+rBothAdv0 <- raster("models/bothAdv1930.grd")
+
+# assessing niche overlap by comparing diploids and tetraploids in 1930
+nicheOverlap(rDipAdv0, rTetraAdv0, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rDipAdv0, rTetraAdv0, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
 ###Using PRISM 2014 weather data
 ##for loop of one-way ANOVA with Tukey's post-hoc(for all uncorrelated weather variables)
 bothPts1 <- as.data.frame(rbind(dipPts1, tetraPts1))#save dataset(made previously in script)as object for ANOVA analysis
@@ -116,8 +125,8 @@ summary(pca_both1) #print importance of components
 plot(pca_both1, type="l") #plot variances
 ncomp <- 2 #specify number of components to load (representing 99% of variation)
 
-## model-based approaches
-# read in default maxent models
+### model-based approaches
+## read in default maxent models
 rDip1 <- raster("models/diploid2014.grd")
 rTetra1 <- raster("models/tetraploid2014.grd")
 rBoth1<- raster("models/both2014.grd")
@@ -137,6 +146,27 @@ nicheOverlap(rTetra0, rTetra1, stat='I', mask=TRUE, checkNegatives=TRUE) # I sta
 #assessing changes in both cytotypes niche from 1930 to 2014
 nicheOverlap(rBoth0, rBoth1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rBoth0, rBoth1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+## read in advanced maxent models
+rDipAdv1 <- raster("models/diploidAdv2014.grd")
+rTetraAdv1 <- raster("models/tetraploidAdv2014.grd")
+rBothAdv1 <- raster("models/bothAdv2014.grd")
+
+# assessing niche overlap by comparing diploids and tetraploids in 2014
+nicheOverlap(rDipAdv1, rTetraAdv1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rDipAdv1, rTetraAdv1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+#assessing changes in diploid niche from 1930 to 2014
+nicheOverlap(rDipAdv0, rDipAdv1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rDipAdv0, rDipAdv1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+#assessing changes in tetraploid niche from 1930 to 2014
+nicheOverlap(rTetraAdv0, rTetraAdv1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rTetraAdv0, rTetraAdv1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+#assessing changes in both cytotypes niche from 1930 to 2014
+nicheOverlap(rBothAdv0, rBothAdv1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rBothAdv0, rBothAdv1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
 
 # assessing niche equivalency
 #nicheEquivalency()
