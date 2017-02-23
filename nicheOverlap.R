@@ -57,6 +57,79 @@ bothPts0 <- as.data.frame(rbind(dipPts0, tetraPts0))
 bothPts1 <- as.data.frame(rbind(dipPts1, tetraPts1))
 
 ###Using PRISM 1930 weather data
+##Instead of using an ANOVA, I will use a Logistic Regression
+#independent continuous variables:weather layers
+#dependent categoric variable:species/ploidy column
+
+# develop testing and training sets for both cytotypes in 1930
+fold <- kfold(bothPts0), k=5) #split occurence points into 5 sets
+both.Test0 <- bothPts0[fold == 1, ] #take 20% (1/5) for testing
+both.Train0 <- bothPts0[fold != 1, ] #leave 40% for training
+
+#fit logistic regression model to data set
+model<-glm(formula= species~., data=both.Train0, family=binomial(link='logit'))
+#view results
+model 
+#view summary of the results of the logistic regression model
+summary(model)
+##Interpreting results of logistic regression model
+#run an ANOVA on the model to analyze the table of deviance
+anova(model, test="Chisq")
+#McFadden R2 index can be used to assess the model fit
+pR2(model)
+##Assessing predictive ability of the model
+#evaluating the fitting of the model: select is indicating the variables to be included
+fitted.results <- predict(model,newdata=subset(both.Test0,select=c(2,3)),type='response')
+fitted.results <- ifelse(fitted.results > 0.5,1,0) #parameters can be changed
+misClasificError <- mean(fitted.results != both.Test0$species)
+print(paste('Accuracy',1-misClasificError))
+#plot the ROC curve 
+p <- predict(model, newdata=both.Test0, type="response")
+pr <- prediction(p, both.Test0$species)
+prf <- performance(pr, measure = "tpr", x.measure = "fpr")
+plot(prf)
+#calculate the AUC 
+auc <- performance(pr, measure = "auc")
+auc <- auc@y.values[[1]]
+auc
+
+###Using PRISM 2014 weather data
+##Instead of using an ANOVA, I will use a Logistic Regression
+#independent continuous variables:weather layers
+#dependent categoric variable:species/ploidy column
+
+# develop testing and training sets for both cytotypes in 2014
+fold <- kfold(bothPts1), k=5) #split occurence points into 5 sets
+both.Test1 <- bothPts1[fold == 1, ] #take 20% (1/5) for testing
+both.Train1 <- bothPts1[fold != 1, ] #leave 40% for training
+
+#fit logistic regression model to data set
+model<-glm(formula= species~., data=both.Train1, family=binomial(link='logit'))
+#view results
+model 
+#view summary of the results of the logistic regression model
+summary(model)
+##Interpreting results of logistic regression model
+#run an ANOVA on the model to analyze the table of deviance
+anova(model, test="Chisq")
+#McFadden R2 index can be used to assess the model fit
+pR2(model)
+##Assessing predictive ability of the model
+#evaluating the fitting of the model
+fitted.results <- predict(model,newdata=subset(both.Test1,select=c(2,3)),type='response')
+fitted.results <- ifelse(fitted.results > 0.5,1,0) #parameters can be changed
+misClasificError <- mean(fitted.results != both.Test1$species)
+print(paste('Accuracy',1-misClasificError))
+#plot the ROC curve 
+p <- predict(model, newdata=both.Test1, type="response")
+pr <- prediction(p, both.Test1$species)
+prf <- performance(pr, measure = "tpr", x.measure = "fpr")
+plot(prf)
+#calculate the AUC 
+auc <- performance(pr, measure = "auc")
+auc <- auc@y.values[[1]]
+auc
+
 ##for loop of one-way ANOVA with Tukey's post-hoc(for all uncorrelated weather variables)
 bothPts0 <- as.data.frame(rbind(dipPts0, tetraPts0))#save dataset(made previously in script)as object for ANOVA analysis
 bothPts0 #view dataset layout
