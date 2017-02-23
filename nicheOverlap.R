@@ -130,22 +130,6 @@ auc <- performance(pr, measure = "auc")
 auc <- auc@y.values[[1]]
 auc
 
-##for loop of one-way ANOVA with Tukey's post-hoc(for all uncorrelated weather variables)
-bothPts0 <- as.data.frame(rbind(dipPts0, tetraPts0))#save dataset(made previously in script)as object for ANOVA analysis
-bothPts0 #view dataset layout
-1:ncol(bothPts0) #displays how many columns are in dataset
-AVz0<- rep(NA,ncol(bothPts0)) #creates a table called AVz with the same number of columns as the dataset. When it is created each cell will have an NA, then we will add data from the for loop in this table.
-sink("anova_results/ANOVA-Tukey0.txt")#creates a text file called ANOVA-Tukey.txt in your anova_results directory
-for (i in 2:ncol(bothPts0)) {
-  column0 <-names(bothPts0[i])
-  AVz0<-summary(aov(bothPts0[,i]~species, data=bothPts0))
-  tk0<-TukeyHSD((aov(bothPts0[,i]~species, data=bothPts0)))
-  print(column0)
-  print(AVz0)
-  print(tk0)
-}
-sink()
-
 # principle component analysis(PCA)
 bothNum0 <- bothPts0[ ,-1] #remove species names
 pca_both0 <- prcomp(bothNum0, center = TRUE, scale. = TRUE) #PCA=Error because only has one weather variable
