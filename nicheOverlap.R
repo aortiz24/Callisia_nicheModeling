@@ -5,6 +5,7 @@ library(raster)
 library(dismo)
 library(ecospat)
 library(ENMeval)
+library(FD)
 
 ## multi-variate climate space comparisons (standard statistical testing, non-model based)
 # import occurrence data and convert to format required by maxent
@@ -225,5 +226,7 @@ nicheOverlap(rTetraAdv0, rTetraAdv1, stat='I', mask=TRUE, checkNegatives=TRUE) #
 nicheOverlap(rBothAdv0, rBothAdv1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rBothAdv0, rBothAdv1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
 
-# assessing niche equivalency
-#nicheEquivalency()
+###Inferential Permutation test of models
+##determines if the two cytotpes distribution are truly different not just different by chance
+#test maxent models
+maxent.test(rDipAdv0, obs=, nperm=1000, plot=TRUE)
