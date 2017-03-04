@@ -20,6 +20,8 @@ tetraploid <- Callisia.both %>%
 tetraploid <- tetraploid[,c(3,2)]
 #deleting rows whose points are outside of SEstates object
 tetraploid<- tetraploid[-c(10,46,56), ]
+#load observed probabilities
+RelAb<-read.csv(file="Relative_abundance.csv")
 
 #layers ending in 0 are for PRISM1930
 #layers ending in 1 are for PRISM2014
@@ -229,4 +231,4 @@ nicheOverlap(rBothAdv0, rBothAdv1, stat='I', mask=TRUE, checkNegatives=TRUE) # I
 ###Inferential Permutation test of models
 ##determines if the two cytotpes distribution are truly different not just different by chance
 #test maxent models
-maxent.test(rDipAdv0, obs=, nperm=1000, plot=TRUE)
+maxent.test(rDipAdv0, obs=RelAb[,2], nperm=1000, plot=TRUE)
