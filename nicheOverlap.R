@@ -5,7 +5,7 @@ library(raster)
 library(dismo)
 library(ecospat)
 library(ENMeval)
-library(FD)
+library(permute)
 
 ## multi-variate climate space comparisons (standard statistical testing, non-model based)
 # import occurrence data and convert to format required by maxent
@@ -20,8 +20,20 @@ tetraploid <- Callisia.both %>%
 tetraploid <- tetraploid[,c(3,2)]
 #deleting rows whose points are outside of SEstates object
 tetraploid<- tetraploid[-c(10,46,56), ]
-#load observed probabilities
-RelAb<-read.csv(file="Relative_abundance.csv")
+
+#import binary data for logistic regression
+#0 equals diploid
+#1 equals tetraploid
+binary<- read.csv("CallisiaBinaryData.csv")
+binary <- na.omit(binary)
+diploidbin <- binary %>%
+  filter(Cytotype=="0")
+diploidbin <- diploidbin[,c(3,2)]
+tetraploidbin <- binary %>%
+  filter(Cytotype=="1")
+tetraploidbin <- tetraploidbin[,c(3,2)]
+#deleting rows whose points are outside of SEstates object
+tetraploidbin<- tetraploidbin[-c(10,46,56), ]
 
 #layers ending in 0 are for PRISM1930
 #layers ending in 1 are for PRISM2014
@@ -45,9 +57,6 @@ dipPts0 <- raster::extract(predictors0, diploid)
 dipPts0 <- cbind.data.frame(species="diploid", dipPts0) #add column for diploid
 dipPts1 <- raster::extract(predictors1, diploid)
 dipPts1 <- cbind.data.frame(species="diploid", dipPts1) #add column for diploid
-tetraPts <- raster::extract(predictors, tetraploid)
-tetraPts <- cbind.data.frame(species="tetraploid", tetraPts)
-tetraPts<-na.omit(tetraPts)#removing NA values
 tetraPts0 <- raster::extract(predictors0, tetraploid)
 tetraPts0 <- cbind.data.frame(species="tetraploid", tetraPts0)
 tetraPts0<-na.omit(tetraPts0)#removing NA values
@@ -59,42 +68,50 @@ tetraPts1<-na.omit(tetraPts1)#removing NA values
 bothPts0 <- as.data.frame(rbind(dipPts0, tetraPts0))
 bothPts1 <- as.data.frame(rbind(dipPts1, tetraPts1))
 
+# extract layer data for each point and add label for logistic regression
+dipbinPts0 <- raster::extract(predictors0, diploidbin)
+dipbinPts0 <- cbind.data.frame(species="0", dipbinPts0) #add column for diploid
+dipbinPts1 <- raster::extract(predictors1, diploidbin)
+dipbinPts1 <- cbind.data.frame(species="0", dipbinPts1) #add column for diploid
+tetrabinPts0 <- raster::extract(predictors0, tetraploidbin)
+tetrabinPts0 <- cbind.data.frame(species="1", tetrabinPts0)
+tetrabinPts0<-na.omit(tetrabinPts0)#removing NA values
+tetrabinPts1 <- raster::extract(predictors1, tetraploidbin)
+tetrabinPts1 <- cbind.data.frame(species="1", tetrabinPts1)
+tetrabinPts1<-na.omit(tetrabinPts1)#removing NA values
+
+# combine diploid and tetraploid for logistic regression
+bothbinPts0 <- as.data.frame(rbind(dipbinPts0, tetrabinPts0))
+bothbinPts1 <- as.data.frame(rbind(dipbinPts1, tetrabinPts1))
+
+
 ###Using PRISM 1930 weather data
 ##Instead of using an ANOVA, I will use a Logistic Regression
 #independent continuous variables:weather layers
 #dependent categoric variable:species/ploidy column
 
-# develop testing and training sets for both cytotypes in 1930
-fold <- kfold(bothPts0), k=5) #split occurence points into 5 sets
-both.Test0 <- bothPts0[fold == 1, ] #take 20% (1/5) for testing
-both.Train0 <- bothPts0[fold != 1, ] #leave 40% for training
+#treat species as a categorical variable
+bothbinPts1$species <- factor(bothbinPts1$species)
+
+# develop testing and training sets for both cytotypes in 2014
+foldbin <- kfold(bothbinPts1, k=5) #split occurence points into 5 sets
+bothbin.Test1 <- bothbinPts1[foldbin == 1, ] #take 20% (1/5) for testing
+bothbin.Train1 <- bothbinPts1[foldbin != 1, ] #leave 80% for training
 
 #fit logistic regression model to data set
-model<-glm(formula= species~., data=both.Train0, family=binomial(link='logit'))
-#view results
-model 
+model<-glm(formula= species~ avg_2014_ppt0 + avg_2014_tmax0, data=bothbin.Train1, family="binomial")
 #view summary of the results of the logistic regression model
 summary(model)
-##Interpreting results of logistic regression model
-#run an ANOVA on the model to analyze the table of deviance
-anova(model, test="Chisq")
-#McFadden R2 index can be used to assess the model fit
-pR2(model)
-##Assessing predictive ability of the model
-#evaluating the fitting of the model: select is indicating the variables to be included
-fitted.results <- predict(model,newdata=subset(both.Test0,select=c(2,3)),type='response')
-fitted.results <- ifelse(fitted.results > 0.5,1,0) #parameters can be changed
-misClasificError <- mean(fitted.results != both.Test0$species)
-print(paste('Accuracy',1-misClasificError))
-#plot the ROC curve 
-p <- predict(model, newdata=both.Test0, type="response")
-pr <- prediction(p, both.Test0$species)
-prf <- performance(pr, measure = "tpr", x.measure = "fpr")
-plot(prf)
-#calculate the AUC 
-auc <- performance(pr, measure = "auc")
-auc <- auc@y.values[[1]]
-auc
+
+#predict with logistic regression using test data
+pred<- predict(model,bothbin.Test1, type="response")
+#Misclassification error=when the model gets it wrong
+model_pred_species<- rep("0",22)
+model_pred_species[pred>0.5]<-"1"
+tab<-table(model_pred_species, bothbin.Test1$species)
+print(tab)
+#calculating misclassification rate=the lower, the better
+1-sum(diag(tab))/sum(tab)
 
 ###Using PRISM 2014 weather data
 ##Instead of using an ANOVA, I will use a Logistic Regression
@@ -102,7 +119,7 @@ auc
 #dependent categoric variable:species/ploidy column
 
 # develop testing and training sets for both cytotypes in 2014
-fold <- kfold(bothPts1), k=5) #split occurence points into 5 sets
+fold <- kfold(bothPts1, k=5) #split occurence points into 5 sets
 both.Test1 <- bothPts1[fold == 1, ] #take 20% (1/5) for testing
 both.Train1 <- bothPts1[fold != 1, ] #leave 40% for training
 
@@ -228,7 +245,5 @@ nicheOverlap(rTetraAdv0, rTetraAdv1, stat='I', mask=TRUE, checkNegatives=TRUE) #
 nicheOverlap(rBothAdv0, rBothAdv1, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rBothAdv0, rBothAdv1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
 
-###Inferential Permutation test of models
-##determines if the two cytotpes distribution are truly different not just different by chance
-#test maxent models
-maxent.test(rDipAdv0, obs=RelAb[,2], nperm=1000, plot=TRUE)
+##Permutation test which determines if the two cytotpes distribution are truly different not just different by chance
+
