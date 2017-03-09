@@ -109,7 +109,7 @@ pred<- predict(model,bothbin.Test1, type="response")
 model_pred_species<- rep("0",22)
 model_pred_species[pred>0.5]<-"1"
 tab<-table(model_pred_species, bothbin.Test1$species)
-#predictive values are the numbers in the left column(0,1)
+#predictive values are the numbers in the left column(0 = predicting diploid, 1 = predicting tetraploid)
 #the top row of numbers represent the diploids (0) and tetrapliods (1)
 # 3 plants are diploids and 15 are tetraploids
 #18 correct predictions were made of the 22 possible predictions of the test data
