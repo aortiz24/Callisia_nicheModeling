@@ -115,7 +115,7 @@ tab<-table(model_pred_species, bothbin.Test1$species)
 #18 correct predictions were made of the 22 possible predictions of the test data
 print(tab) 
 
-#4 predictions are missclasifications
+#1+3=4 predictions are missclasifications
 #calculating misclassification rate=the lower, the better
 #for this specific case it is about 0.18
 1-sum(diag(tab))/sum(tab)
