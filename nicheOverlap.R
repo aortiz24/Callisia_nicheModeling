@@ -109,8 +109,15 @@ pred<- predict(model,bothbin.Test1, type="response")
 model_pred_species<- rep("0",22)
 model_pred_species[pred>0.5]<-"1"
 tab<-table(model_pred_species, bothbin.Test1$species)
-print(tab)
+#predictive values are the numbers in the left column(0,1)
+#the top row of numbers represent the diploids (0) and tetrapliods (1)
+# 3 plants are diploids and 15 are tetraploids
+#18 correct predictions were made of the 22 possible predictions of the test data
+print(tab) 
+
+#4 predictions are missclasifications
 #calculating misclassification rate=the lower, the better
+#for this specific case it is about 0.18
 1-sum(diag(tab))/sum(tab)
 
 ###Using PRISM 2014 weather data
