@@ -5,7 +5,9 @@ library(raster)
 library(dismo)
 library(ecospat)
 library(ENMeval)
-library(permute)
+library(fossil)
+library(vegan)
+library(rms)
 
 ## multi-variate climate space comparisons (standard statistical testing, non-model based)
 # import occurrence data and convert to format required by maxent
@@ -20,20 +22,6 @@ tetraploid <- Callisia.both %>%
 tetraploid <- tetraploid[,c(3,2)]
 #deleting rows whose points are outside of SEstates object
 tetraploid<- tetraploid[-c(10,46,56), ]
-
-#import binary data for logistic regression
-#0 equals diploid
-#1 equals tetraploid
-binary<- read.csv("CallisiaBinaryData.csv")
-binary <- na.omit(binary)
-diploidbin <- binary %>%
-  filter(Cytotype=="0")
-diploidbin <- diploidbin[,c(3,2)]
-tetraploidbin <- binary %>%
-  filter(Cytotype=="1")
-tetraploidbin <- tetraploidbin[,c(3,2)]
-#deleting rows whose points are outside of SEstates object
-tetraploidbin<- tetraploidbin[-c(10,46,56), ]
 
 #layers ending in 0 are for PRISM1930
 #layers ending in 1 are for PRISM2014
@@ -68,96 +56,66 @@ tetraPts1<-na.omit(tetraPts1)#removing NA values
 bothPts0 <- as.data.frame(rbind(dipPts0, tetraPts0))
 bothPts1 <- as.data.frame(rbind(dipPts1, tetraPts1))
 
-# extract layer data for each point and add label for logistic regression
-dipbinPts0 <- raster::extract(predictors0, diploidbin)
-dipbinPts0 <- cbind.data.frame(species="0", dipbinPts0) #add column for diploid
-dipbinPts1 <- raster::extract(predictors1, diploidbin)
-dipbinPts1 <- cbind.data.frame(species="0", dipbinPts1) #add column for diploid
-tetrabinPts0 <- raster::extract(predictors0, tetraploidbin)
-tetrabinPts0 <- cbind.data.frame(species="1", tetrabinPts0)
-tetrabinPts0<-na.omit(tetrabinPts0)#removing NA values
-tetrabinPts1 <- raster::extract(predictors1, tetraploidbin)
-tetrabinPts1 <- cbind.data.frame(species="1", tetrabinPts1)
-tetrabinPts1<-na.omit(tetrabinPts1)#removing NA values
-
-# combine diploid and tetraploid for logistic regression
-bothbinPts0 <- as.data.frame(rbind(dipbinPts0, tetrabinPts0))
-bothbinPts1 <- as.data.frame(rbind(dipbinPts1, tetrabinPts1))
-
-
 ###Using PRISM 1930 weather data
 ##Instead of using an ANOVA, I will use a Logistic Regression
 #independent continuous variables:weather layers
 #dependent categoric variable:species/ploidy column
+x0 <-bothPts0
+colnames(x0) <- tolower(colnames(x0))
+colnames(x0)[which(colnames(x0) == "long_")] <- "long"
+x0[,2] <- as.numeric(x0[,2])
 
-#treat species as a categorical variable
-bothbinPts1$species <- factor(bothbinPts1$species)
+#set up matrix to correct for spatial autocorrelation in logistic regression for 1930 
+x.matrix0 <- earth.dist(x0[,c("lat", "long")])
+x.matrix0 <- as.matrix(x.matrix0)
+pcnm.x.matrix0 <- pcnm(x.matrix0)
+x.env.pcnm0 <- cbind(x, pcnm.x.matrix0$vectors[,1:round((length(which(pcnm.x.matrix0$values > 0)))/2)])
 
-# develop testing and training sets for both cytotypes in 2014
-foldbin <- kfold(bothbinPts1, k=5) #split occurence points into 5 sets
-bothbin.Test1 <- bothbinPts1[foldbin == 1, ] #take 20% (1/5) for testing
-bothbin.Train1 <- bothbinPts1[foldbin != 1, ] #leave 80% for training
+for(i in 4:ncol(x)){
+  
+  x.env.pcnm0 <- cbind(x.env.pcnm0, scale(x.env.pcnm0[,i], scale = sd(x.env.pcnm0[,i], na.rm = TRUE)))
+  colnames(x.env.pcnm0)[ncol(x.env.pcnm0)] <- paste("std", colnames(x)[i], sep = ".")
+  
+}
 
-#fit logistic regression model to data set
-model<-glm(formula= species~ avg_2014_ppt0 + avg_2014_tmax0, data=bothbin.Train1, family="binomial")
-#view summary of the results of the logistic regression model
-summary(model)
+colnames(x.env.pcnm0)
 
-#predict with logistic regression using test data
-pred<- predict(model,bothbin.Test1, type="response")
-#Misclassification error=when the model gets it wrong
-model_pred_species<- rep("0",22)
-model_pred_species[pred>0.5]<-"1"
-tab<-table(model_pred_species, bothbin.Test1$species)
-#predictive values are the numbers in the left column(0 = predicting diploid, 1 = predicting tetraploid)
-#the top row of numbers represent the diploids (0) and tetrapliods (1)
-# 3 plants are diploids and 15 are tetraploids
-#18 correct predictions were made of the 22 possible predictions of the test data
-print(tab) 
-
-#1+3=4 predictions are missclasifications
-#calculating misclassification rate=the lower, the better
-#for this specific case it is about 0.18
-1-sum(diag(tab))/sum(tab)
+#1930 - Look at the column names in the data frame "x.env.pcnm0". 
+#Put all the columns named "PCNM..." into the model below, 
+#followed by all the environmental variable columns named in bothPts0
+model.lrm0 <- lrm(x.env.pcnm0[,"species"] ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + PCNM9 + PCNM10 + PCNM11 + std.bio3 + std.bio4 + std.bio6 + std.bio19, y = TRUE, data=x.env.pcnm, penalty = 0.001)
 
 ###Using PRISM 2014 weather data
 ##Instead of using an ANOVA, I will use a Logistic Regression
 #independent continuous variables:weather layers
 #dependent categoric variable:species/ploidy column
+x1 <-bothPts1
+colnames(x1) <- tolower(colnames(x1))
+colnames(x1)[which(colnames(x1) == "long_")] <- "long"
+x1[,2] <- as.numeric(x1[,2])
+x1[,3] <- as.numeric(x1[,3]) 
 
-# develop testing and training sets for both cytotypes in 2014
-fold <- kfold(bothPts1, k=5) #split occurence points into 5 sets
-both.Test1 <- bothPts1[fold == 1, ] #take 20% (1/5) for testing
-both.Train1 <- bothPts1[fold != 1, ] #leave 40% for training
+#set up matrix to correct for spatial autocorrelation in logistic regression for 2014 
+x.matrix1 <- earth.dist(x1[,c("lat", "long")])
+x.matrix1 <- as.matrix(x.matrix1)
+pcnm.x.matrix1 <- pcnm(x.matrix1)
+x.env.pcnm1 <- cbind(x, pcnm.x.matrix1$vectors[,1:round((length(which(pcnm.x.matrix1$values > 0)))/2)])
 
-#fit logistic regression model to data set
-model<-glm(formula= species~., data=both.Train1, family=binomial(link='logit'))
-#view results
-model 
-#view summary of the results of the logistic regression model
-summary(model)
-##Interpreting results of logistic regression model
-#run an ANOVA on the model to analyze the table of deviance
-anova(model, test="Chisq")
-#McFadden R2 index can be used to assess the model fit
-pR2(model)
-##Assessing predictive ability of the model
-#evaluating the fitting of the model
-fitted.results <- predict(model,newdata=subset(both.Test1,select=c(2,3)),type='response')
-fitted.results <- ifelse(fitted.results > 0.5,1,0) #parameters can be changed
-misClasificError <- mean(fitted.results != both.Test1$species)
-print(paste('Accuracy',1-misClasificError))
-#plot the ROC curve 
-p <- predict(model, newdata=both.Test1, type="response")
-pr <- prediction(p, both.Test1$species)
-prf <- performance(pr, measure = "tpr", x.measure = "fpr")
-plot(prf)
-#calculate the AUC 
-auc <- performance(pr, measure = "auc")
-auc <- auc@y.values[[1]]
-auc
+for(i in 4:ncol(x)){
+  
+  x.env.pcnm1 <- cbind(x.env.pcnm1, scale(x.env.pcnm1[,i], scale = sd(x.env.pcnm1[,i], na.rm = TRUE)))
+  colnames(x.env.pcnm1)[ncol(x.env.pcnm1)] <- paste("std", colnames(x)[i], sep = ".")
+  
+}
 
-# principle component analysis(PCA)
+colnames(x.env.pcnm1)
+
+#2014 - Look at the column names in the data frame "x.env.pcnm1". 
+#Put all the columns named "PCNM..." into the model below, 
+#followed by all the environmental variable columns named in bothPts1
+model.lrm1 <- lrm(x.env.pcnm1[,"species"] ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + PCNM9 + PCNM10 + PCNM11 + std.bio3 + std.bio4 + std.bio6 + std.bio19, y = TRUE, data=x.env.pcnm, penalty = 0.001)
+
+## principle component analysis(PCA)
 bothNum0 <- bothPts0[ ,-1] #remove species names
 pca_both0 <- prcomp(bothNum0, center = TRUE, scale. = TRUE) #PCA=Error because only has one weather variable
 print(pca_both0) #print deviations and rotations=Error because only has one weather variable
@@ -183,23 +141,6 @@ rBothAdv0 <- raster("models/bothAdv1930.grd")
 # assessing niche overlap by comparing diploids and tetraploids in 1930
 nicheOverlap(rDipAdv0, rTetraAdv0, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rDipAdv0, rTetraAdv0, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
-
-###Using PRISM 2014 weather data
-##for loop of one-way ANOVA with Tukey's post-hoc(for all uncorrelated weather variables)
-bothPts1 <- as.data.frame(rbind(dipPts1, tetraPts1))#save dataset(made previously in script)as object for ANOVA analysis
-bothPts1 #view dataset layout
-1:ncol(bothPts1) #displays how many columns are in dataset
-AVz1<- rep(NA,ncol(bothPts1)) #creates a table called AVz with the same number of columns as the dataset. When it is created each cell will have an NA, then we will add data from the for loop in this table.
-sink("anova_results/ANOVA-Tukey1.txt")#creates a text file called ANOVA-Tukey.txt in your anova_results directory
-for (i in 2:ncol(bothPts1)) {
-  column1 <-names(bothPts1[i])
-  AVz1<-summary(aov(bothPts1[,i]~species, data=bothPts1))
-  tk1<-TukeyHSD((aov(bothPts1[,i]~species, data=bothPts1)))
-  print(column1)
-  print(AVz1)
-  print(tk1)
-}
-sink()
 
 # principle component analysis(PCA)
 bothNum1 <- bothPts1[ ,-1] #remove species names
@@ -253,4 +194,26 @@ nicheOverlap(rBothAdv0, rBothAdv1, stat='D', mask=TRUE, checkNegatives=TRUE) # D
 nicheOverlap(rBothAdv0, rBothAdv1, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
 
 ##Permutation test which determines if the two cytotpes distribution are truly different not just different by chance
+#copy and paste the _sorted.csv file in the rresult folder within ENMTools to the working directory
+# load results of permuted model replications csv
+y <- read.csv("IDENTITY_tetraploid_vs_diploid_sorted.csv")
 
+#This data is permuted, meaning that the data points of the two species were
+#scambled for each run, so that there really is no niche difference among 
+#the two "species." Then for each of those runs, the I and D stats were 
+#calculated. This gives you an idea of the range of I and D scores you would
+#expect to see when in fact the underlying points DO NOT differ in their 
+#niches. If you want to claim that your two species differ in their niches,
+#the I or D score you get should be LOWER than the I or D 
+#values that were calculated using the fake data (lower than 95% of the I or
+#D scores from the fake data or more).
+
+quantile(y[,1], 0.05)
+
+#This gives you the 5% threshold of permuted I values
+#Change this to y[,2] if you want to get this stat for D instead of I.
+quantile(y[,2], 0.05)
+
+#Now compare this 5% threshold to the observed I point estimate (you should
+#have calculated this point estimate earlier). If the point estimate is 
+#lower than the 5% threshold, then the niches are significantly different.
