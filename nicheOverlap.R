@@ -207,7 +207,6 @@ y <- read.csv("IDENTITY_tetraploid_vs_diploid_sorted.csv")
 #the I or D score you get should be LOWER than the I or D 
 #values that were calculated using the fake data (lower than 95% of the I or
 #D scores from the fake data or more).
-
 quantile(y[,1], 0.05)
 
 #This gives you the 5% threshold of permuted I values
