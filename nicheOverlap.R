@@ -60,21 +60,35 @@ bothPts1 <- as.data.frame(rbind(dipPts1, tetraPts1))
 ##Instead of using an ANOVA, I will use a Logistic Regression
 #independent continuous variables:weather layers
 #dependent categoric variable:species/ploidy column
-x0 <-bothPts0
+
+#import occurrence data for both Callisia cytotypes
+both <- read.csv(file="both.csv")
+
+#to make the dataframe with columns: cytotype labels, latitude,longitude, environmental variables containing extracted data 
+#1930
+master0<- cbind(both,bothPts0)
+master0<- master0[,-4] 
+
+#2014
+master1<- cbind(both,bothPts1)
+master1<- master1[,-4] 
+
+#enter dataframe in logistic regression code
+x0 <-master0
 colnames(x0) <- tolower(colnames(x0))
-colnames(x0)[which(colnames(x0) == "long_")] <- "long"
 x0[,2] <- as.numeric(x0[,2])
+x0[,3] <- as.numeric(x0[,3]) 
 
 #set up matrix to correct for spatial autocorrelation in logistic regression for 1930 
-x.matrix0 <- earth.dist(x0[,c("lat", "long")])
+x.matrix0 <- earth.dist(x0[,c("latitude", "longitude")])
 x.matrix0 <- as.matrix(x.matrix0)
 pcnm.x.matrix0 <- pcnm(x.matrix0)
-x.env.pcnm0 <- cbind(x, pcnm.x.matrix0$vectors[,1:round((length(which(pcnm.x.matrix0$values > 0)))/2)])
+x.env.pcnm0 <- cbind(x0, pcnm.x.matrix0$vectors[,1:round((length(which(pcnm.x.matrix0$values > 0)))/2)])
 
-for(i in 4:ncol(x)){
+for(i in 4:ncol(x0)){
   
   x.env.pcnm0 <- cbind(x.env.pcnm0, scale(x.env.pcnm0[,i], scale = sd(x.env.pcnm0[,i], na.rm = TRUE)))
-  colnames(x.env.pcnm0)[ncol(x.env.pcnm0)] <- paste("std", colnames(x)[i], sep = ".")
+  colnames(x.env.pcnm0)[ncol(x.env.pcnm0)] <- paste("std", colnames(x0)[i], sep = ".")
   
 }
 
@@ -82,29 +96,33 @@ colnames(x.env.pcnm0)
 
 #1930 - Look at the column names in the data frame "x.env.pcnm0". 
 #Put all the columns named "PCNM..." into the model below, 
-#followed by all the environmental variable columns named in bothPts0
-model.lrm0 <- lrm(x.env.pcnm0[,"species"] ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + PCNM9 + PCNM10 + PCNM11 + std.bio3 + std.bio4 + std.bio6 + std.bio19, y = TRUE, data=x.env.pcnm, penalty = 0.001)
+#followed by all the environmental variable columns starting with "std..."
+model.lrm0 <- lrm(x.env.pcnm0[,"cytotype"] ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + std.avg_1930_ppt0, y = TRUE, data=x.env.pcnm0, penalty = 0.001)
+
+#view results, variables with a p-value[Pr(>|z|)] of <0.05 are significant
+#the PCNM variables are adjusting for spatial autocorrelation, 
+#and allow me to make bolder statements about the variables that are influencing cytotype distribution
+model.lrm0
 
 ###Using PRISM 2014 weather data
 ##Instead of using an ANOVA, I will use a Logistic Regression
 #independent continuous variables:weather layers
 #dependent categoric variable:species/ploidy column
-x1 <-bothPts1
+x1 <-master1
 colnames(x1) <- tolower(colnames(x1))
-colnames(x1)[which(colnames(x1) == "long_")] <- "long"
 x1[,2] <- as.numeric(x1[,2])
 x1[,3] <- as.numeric(x1[,3]) 
 
 #set up matrix to correct for spatial autocorrelation in logistic regression for 2014 
-x.matrix1 <- earth.dist(x1[,c("lat", "long")])
+x.matrix1 <- earth.dist(x1[,c("latitude", "longitude")])
 x.matrix1 <- as.matrix(x.matrix1)
 pcnm.x.matrix1 <- pcnm(x.matrix1)
-x.env.pcnm1 <- cbind(x, pcnm.x.matrix1$vectors[,1:round((length(which(pcnm.x.matrix1$values > 0)))/2)])
+x.env.pcnm1 <- cbind(x1, pcnm.x.matrix1$vectors[,1:round((length(which(pcnm.x.matrix1$values > 0)))/2)])
 
-for(i in 4:ncol(x)){
+for(i in 4:ncol(x1)){
   
   x.env.pcnm1 <- cbind(x.env.pcnm1, scale(x.env.pcnm1[,i], scale = sd(x.env.pcnm1[,i], na.rm = TRUE)))
-  colnames(x.env.pcnm1)[ncol(x.env.pcnm1)] <- paste("std", colnames(x)[i], sep = ".")
+  colnames(x.env.pcnm1)[ncol(x.env.pcnm1)] <- paste("std", colnames(x1)[i], sep = ".")
   
 }
 
@@ -112,9 +130,14 @@ colnames(x.env.pcnm1)
 
 #2014 - Look at the column names in the data frame "x.env.pcnm1". 
 #Put all the columns named "PCNM..." into the model below, 
-#followed by all the environmental variable columns named in bothPts1
-model.lrm1 <- lrm(x.env.pcnm1[,"species"] ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + PCNM9 + PCNM10 + PCNM11 + std.bio3 + std.bio4 + std.bio6 + std.bio19, y = TRUE, data=x.env.pcnm, penalty = 0.001)
+#followed by all the environmental variable columns starting with "std..."
+model.lrm1 <- lrm(x.env.pcnm1[,"cytotype"] ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + std.avg_2014_ppt0 + std.avg_2014_tmax0, y = TRUE, data=x.env.pcnm1, penalty = 0.001)
 
+#view results, variables with a p-value[Pr(>|z|)] of <0.05 are significant
+#the PCNM variables are adjusting for spatial autocorrelation, 
+#and allow me to make bolder statements about the variables that are influencing cytotype distribution
+model.lrm1
+ 
 ## principle component analysis(PCA)
 bothNum0 <- bothPts0[ ,-1] #remove species names
 pca_both0 <- prcomp(bothNum0, center = TRUE, scale. = TRUE) #PCA=Error because only has one weather variable
