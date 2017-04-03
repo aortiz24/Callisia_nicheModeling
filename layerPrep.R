@@ -143,3 +143,123 @@ write.csv(c1, "correlation2014.csv")
 # inspect output for correlations between layers
 #   0.7 and above (or -0.7 and below) are correlated
 #   for this analysis, retain tmax1, ppt1
+
+###Past 1929
+## load PRISM1929 ppt layers
+ppt_4kmM2_9 <- raster("~data/dataLayers/PRISM1929/PRISM_ppt_stable_4kmM2_1929_all_bil/PRISM_ppt_stable_4kmM2_1929_bil.bil")
+
+##change projection of past data layers
+projection(ppt_4kmM2_9) <- CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs") #project
+
+## clip data layers
+ppt_9 <- mask(ppt_4kmM2_9, SEstates)
+ppt.9 <- crop(ppt_9, extent(SEstates))
+writeRaster(ppt.9, "~data/PastLayers/1929/ppt9.asc", format="ascii", overwrite=TRUE)
+
+## load PRISM1929 tmax layers
+tmax_4kmM2_9 <- raster("~data/dataLayers/PRISM1929/PRISM_tmax_stable_4kmM2_1929_all_bil/PRISM_tmax_stable_4kmM2_1929_bil.bil")
+
+##change projection of past data layers
+projection(tmax_4kmM2_9) <- CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs") #project
+
+## clip data layers
+tmax_9 <- mask(tmax_4kmM2_9, SEstates)
+tmax.9 <- crop(tmax_9, extent(SEstates))
+writeRaster(tmax.9, "/Users/hertwecklab/Documents/Thesis/data/PastLayers/1929/tmax9.asc", format="ascii", overwrite=TRUE)
+
+## load PRISM1929 tmean layers
+tmean_4kmM2_9 <- raster("/Users/hertwecklab/Documents/Thesis/data/dataLayers/PRISM1929/PRISM_tmean_stable_4kmM2_1929_all_bil/PRISM_tmean_stable_4kmM2_1929_bil.bil")
+
+##change projection of past data layers
+projection(tmean_4kmM2_9) <- CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs") #project
+
+## clip data layers
+tmean_9 <- mask(tmean_4kmM2_9, SEstates)
+tmean.9 <- crop(tmean_9, extent(SEstates))
+writeRaster(tmean.9, "/Users/hertwecklab/Documents/Thesis/data/PastLayers/1929/tmean9.asc", format="ascii", overwrite=TRUE)
+
+## load PRISM1929 tmin layers
+tmin_4kmM2_9 <- raster("~data/dataLayers/PRISM1929/PRISM_tmin_stable_4kmM2_1929_all_bil/PRISM_tmin_stable_4kmM2_1929_bil.bil")
+
+##change projection of past data layers
+projection(tmin_4kmM2_9) <- CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs") #project
+
+## clip data layers
+tmin_9 <- mask(tmin_4kmM2_9, SEstates)
+tmin.9 <- crop(tmin_9, extent(SEstates))
+writeRaster(tmin.9, "~data/PastLayers/1929/tmin9.asc", format="ascii", overwrite=TRUE)
+
+## if layers have already been clipped, masked and saved and you need to reload them:
+ppt9 <- raster("layers/avg_1929_ppt9.asc")
+tmax9 <- raster("layers/avg_1929_tmax9.asc")
+tmean9 <- raster("layers/avg_1929_tmean9.asc")
+tmin9 <- raster("layers/avg_1929_tmin9.asc")
+
+## correlation analysis
+stack9 <- stack(tmin9, tmean9, tmax9, ppt9) 
+corr9 <- layerStats(stack9, 'pearson', na.rm=TRUE)
+c9 <- corr9$`pearson correlation coefficient`
+write.csv(c9, "correlation1929.csv")
+# inspect output for correlations between layers
+#   0.7 and above (or -0.7 and below) are correlated
+#   for this analysis, retain 
+
+###Past 2011
+## load PRISM2011 ppt layers
+ppt_4kmM3_11 <- raster("~data/dataLayers/PRISM2011/PRISM_ppt_stable_4kmM3_2011_all_bil/PRISM_ppt_stable_4kmM3_2011_bil.bil")
+
+##change projection of past data layers
+projection(ppt_4kmM3_11) <- CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs") #project
+
+## clip data layers
+ppt_11 <- mask(ppt_4kmM3_11, SEstates)
+ppt.11 <- crop(ppt_11, extent(SEstates))
+writeRaster(ppt.11, "~data/PastLayers/2011/ppt11.asc", format="ascii", overwrite=TRUE)
+
+## load PRISM2011 tmax layers
+tmax_4kmM2_11 <- raster("~data/dataLayers/PRISM2011/PRISM_tmax_stable_4kmM2_2011_all_bil/PRISM_tmax_stable_4kmM2_2011_bil.bil")
+
+##change projection of past data layers
+projection(tmax_4kmM2_11) <- CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs") #project
+
+## clip data layers
+tmax_11 <- mask(tmax_4kmM2_11, SEstates)
+tmax.11 <- crop(tmax_11, extent(SEstates))
+writeRaster(tmax.11, "~data/PastLayers/2011/tmax11.asc", format="ascii", overwrite=TRUE)
+
+## load PRISM2011 tmean layers
+tmean_4kmM2_11 <- raster("~data/dataLayers/PRISM2011/PRISM_tmean_stable_4kmM2_2011_all_bil/PRISM_tmean_stable_4kmM2_2011_bil.bil")
+
+##change projection of past data layers
+projection(tmean_4kmM2_11) <- CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs") #project
+
+## clip data layers
+tmean_11 <- mask(tmean_4kmM2_11, SEstates)
+tmean.11 <- crop(tmean_11, extent(SEstates))
+writeRaster(tmean.11, "~data/PastLayers/2011/tmean11.asc", format="ascii", overwrite=TRUE)
+
+## load PRISM2011 tmin layers
+tmin_4kmM2_11 <- raster("~data/dataLayers/PRISM2011/PRISM_tmin_stable_4kmM2_2011_all_bil/PRISM_tmin_stable_4kmM2_2011_bil.bil")
+
+##change projection of past data layers
+projection(tmin_4kmM2_11) <- CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs") #project
+
+## clip data layers
+tmin_11 <- mask(tmin_4kmM2_11, SEstates)
+tmin.11 <- crop(tmin_11, extent(SEstates))
+writeRaster(tmin.11, "~data/PastLayers/2011/tmin11.asc", format="ascii", overwrite=TRUE)
+
+## if layers have already been clipped, masked and saved and you need to reload them:
+ppt11 <- raster("layers/avg_2011_ppt11.asc")
+tmax11 <- raster("layers/avg_2011_tmax11.asc")
+tmean1 <- raster("layers/avg_2011_tmean11.asc")
+tmin11 <- raster("layers/avg_2011_tmin11.asc")
+
+## correlation analysis
+stack11 <- stack(tmin11, tmean11, tmax11, ppt11) 
+corr11 <- layerStats(stack11, 'pearson', na.rm=TRUE)
+c11 <- corr11$`pearson correlation coefficient`
+write.csv(c11, "correlation2011.csv")
+# inspect output for correlations between layers
+#   0.7 and above (or -0.7 and below) are correlated
+#   for this analysis, retain
