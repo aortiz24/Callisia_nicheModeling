@@ -238,7 +238,7 @@ c9 <- corr9$`pearson correlation coefficient`
 write.csv(c9, "correlation1929.csv")
 # inspect output for correlations between layers
 #   0.7 and above (or -0.7 and below) are correlated
-#   for this analysis, retain 
+#   for this analysis, retain tmean9 & vpdmin9
 
 ###Past 2011
 ## load PRISM2011 ppt layers
