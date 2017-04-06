@@ -321,7 +321,7 @@ writeRaster(tdmean.11, "~/Desktop/Callisia_nicheModeling/layers/tdmean11.asc", f
 ## if layers have already been clipped, masked and saved and you need to reload them:
 ppt11 <- raster("layers/ppt11.asc")
 tmax11 <- raster("layers/tmax11.asc")
-tmean1 <- raster("layers/tmean11.asc")
+tmean11 <- raster("layers/tmean11.asc")
 tmin11 <- raster("layers/tmin11.asc")
 vpdmax11 <- raster("layers/vpdmax11.asc")
 vpdmin11 <- raster("layers/vpdmin11.asc")
@@ -334,4 +334,4 @@ c11 <- corr11$`pearson correlation coefficient`
 write.csv(c11, "correlation2011.csv")
 # inspect output for correlations between layers
 #   0.7 and above (or -0.7 and below) are correlated
-#   for this analysis, retain
+#   for this analysis, retain tmin11, ppt11, vpdmin11
