@@ -718,3 +718,219 @@ rBothAdv9 <- predict(maxBothAdv9, predictors9) # create model
 plot(rBothAdv9) # plot predictive model
 points(tetraploid) # add points to predictive model
 writeRaster(rBothAdv9, "models/bothAdv1929.grd")
+
+### basic bioclim modeling with PRISM 1930 layers for diploids then tetraploids
+# extract layer data for each point
+dipPts11 <- extract(predictors11, diploid)
+# create bioclim model
+dipBC11 <- bioclim(dipPts11)
+# predict bioclim model
+dipBCpredict11 <- predict(predictors11, dipBC11)
+# plot bioclim model
+plot(dipBCpredict11)
+
+# extract layer data for each point
+tetraPts11 <- extract(predictors11, tetraploid)
+# create bioclim model
+tetraBC11 <- bioclim(tetraPts11)
+# predict bioclim model
+tetraBCpredict11 <- predict(predictors11, tetraBC11)
+# plot bioclim model
+plot(tetraBCpredict11)
+
+# extract layer data for each point for both cytotypes
+bothPts11 <- extract(predictors11, both)
+# create bioclim model
+bothBC11 <- bioclim(bothPts11)
+# predict bioclim model
+bothBCpredict11 <- predict(predictors11, bothBC11)
+# plot bioclim model
+plot(bothBCpredict11)
+
+## Default maxent modeling
+# run maxent for diploid (default parameters for dismo)
+maxDip11 <- maxent(predictors11, diploid)
+maxDip11 # views results in browser window
+response(maxDip11) # show response curves for each layer
+rDip11 <- predict(maxDip11, predictors11) # create model
+plot(rDip11) # plot predictive model
+points(diploid) # add points to predictive model
+writeRaster(rDip11, "models/diploid2011.grd")
+
+# run maxent for tetraploid (default parameters for dismo)
+maxTetra11 <- maxent(predictors11, tetraploid) 
+maxTetra11 
+response(maxTetra11) 
+rTetra11 <- predict(maxTetra11, predictors11) 
+plot(rTetra11)
+points(tetraploid)
+writeRaster(rTetra11, "models/tetraploid2011.grd")
+
+# run maxent for both cytotypes (default parameters for dismo)
+maxBoth11 <- maxent(predictors11, both)
+maxBoth11 # views results in browser window
+response(maxBoth11) # show response curves for each layer
+rBoth11 <- predict(maxBoth11, predictors11) # create model
+plot(rBoth11) # plot predictive model
+points(both) # add points to predictive model
+writeRaster(rBoth11, "models/both2011.grd")
+
+## Advanced modeling
+# develop testing and training sets for diploid
+fold <- kfold(diploid, k=5) #split occurence points into 5 sets
+dipTest11 <- diploid[fold == 1, ] #take 20% (1/5) for testing
+dipTrain11 <- diploid[fold != 1, ] #leave 40% for training
+# fit training model for diploid
+maxDipTrain11 <- maxent(predictors11, dipTrain11) #fit maxent model
+maxDipTrain11 #view results in html
+rDipTrain11 <- predict(maxDipTrain11, predictors11) #predict full model
+plot(rDipTrain11) #visualize full model
+points(diploid) #add points to plot
+# testing model for diploid
+# extract background points
+bg11 <- randomPoints(predictors11, 1000)
+# cross-validate model for diploid
+maxDipTest11 <- evaluate(maxDipTrain11, p=dipTest11, a=bg11, x=predictors11)
+maxDipTest11 #print results
+threshold(maxDipTest11) #identify threshold for presence or absence
+plot(maxDipTest11, 'ROC') #plot AUC
+# alternative methods for testing models (should give same answers)
+# Alternative 1: another way to test model for diploid
+pvtest11 <- data.frame(extract(predictors11, dipTest11))
+avtest11 <- data.frame(extract(predictors11, bg11))
+# cross-validate model
+maxDipTest211 <- evaluate(maxDipTrain11, p=pvtest11, a=avtest11)
+maxDipTest211
+# Alternative 2: predict to testing points for diploid
+testp11 <- predict(maxDipTrain11, pvtest11)
+testa11 <- predict(maxDipTrain11, avtest11)
+maxDipTest311 <- evaluate(p=testp11, a=testa11)
+maxDipTest311
+# maxent with jackknife, random seed, and response curves, followed by cross
+#jackknife not run because only one layer in predictor11
+maxDipAdv11 <- maxent(
+  x=predictors11,
+  p=diploid,
+  removeDuplicates=TRUE,
+  nbg=10000,
+  args=c(
+    'randomseed=true', #default=false
+    'threads=2', #default=1
+    'responsecurves=true', #default=false
+    'replicates=10', #default=1
+    'replicatetype=crossvalidate',
+    'maximumiterations=1000' #default=500
+  )
+)
+maxDipAdv11 #view output as html
+response(maxDipAdv11) # show response curves for each layer
+rDipAdv11 <- predict(maxDipAdv11, predictors11) # create model
+plot(rDipAdv11) # plot predictive model
+points(diploid) # add points to predictive model
+writeRaster(rDipAdv11, "models/diploidAdv2011.grd")
+
+# develop testing and training sets for tetraploid
+fold <- kfold(tetraploid, k=5) #split occurence points into 5 sets
+tetraTest11 <- tetraploid[fold == 1, ] #take 20% (1/5) for testing
+tetraTrain11 <- tetraploid[fold != 1, ] #leave 40% for training
+# fit training model for tetraploid
+maxTetraTrain11 <- maxent(predictors11, tetraTrain11) #fit maxent model
+maxTetraTrain11 #view results in html
+rTetraTrain11 <- predict(maxTetraTrain11, predictors11) #predict full model
+plot(rTetraTrain11) #visualize full model
+points(tetraploid) #add points to plot
+# testing model for tetraploid
+# extract background points
+bg11 <- randomPoints(predictors11, 1000)
+# cross-validate model for tetraploid
+maxTetraTest11 <- evaluate(maxTetraTrain11, p=tetraTest11, a=bg11, x=predictors11)
+maxTetraTest11 #print results
+threshold(maxTetraTest11) #identify threshold for presence or absence
+plot(maxTetraTest11, 'ROC') #plot AUC
+# alternative methods for testing models (should give same answers)
+# Alternative 1: another way to test model for tetraploid
+pvtest11 <- data.frame(extract(predictors11, tetraTest11))
+avtest11 <- data.frame(extract(predictors11, bg11))
+# cross-validate model
+maxTetraTest211 <- evaluate(maxTetraTrain11, p=pvtest11, a=avtest11)
+maxTetraTest211
+# Alternative 2: predict to testing points for tetraploid
+testp11 <- predict(maxTetraTrain11, pvtest11)
+testa11 <- predict(maxTetraTrain11, avtest11)
+maxTetraTest311 <- evaluate(p=testp11, a=testa11)
+maxTetraTest311
+# maxent with jackknife, random seed, and response curves, followed by cross-validation
+#jackknife not run because only one layer in predictor11
+maxTetraAdv11 <- maxent(
+  x=predictors11,
+  p=tetraploid,
+  removeDuplicates=TRUE,
+  nbg=10000,
+  args=c(
+    'randomseed=true', #default=false
+    'threads=2', #default=1
+    'responsecurves=true', #default=false
+    'replicates=10', #default=1
+    'replicatetype=crossvalidate',
+    'maximumiterations=1000' #default=500
+  )
+)
+maxTetraAdv11 #view output as html
+response(maxTetraAdv11) # show response curves for each layer
+rTetraAdv11 <- predict(maxTetraAdv11, predictors11) # create model
+plot(rTetraAdv11) # plot predictive model
+points(tetraploid) # add points to predictive model
+writeRaster(rTetraAdv11, "models/tetraploidAdv2011.grd")
+
+# develop testing and training sets for both cytotypes
+fold <- kfold(both, k=5) #split occurence points into 5 sets
+bothTest11 <- both[fold == 1, ] #take 20% (1/5) for testing
+bothTrain11 <- both[fold != 1, ] #leave 40% for training
+# fit training model for both cytotypes
+maxBothTrain11 <- maxent(predictors11, BothTrain11) #fit maxent model
+maxBothTrain11 #view results in html
+rBothTrain11 <- predict(maxBothTrain11, predictors11) #predict full model
+plot(rBothTrain11) #visualize full model
+points(both) #add points to plot
+# testing model for both cytotypes
+# extract background points
+bg11 <- randomPoints(predictors11, 1000)
+# cross-validate model for both cytotypes
+maxBothTest11 <- evaluate(maxBothTrain11, p=bothTest11, a=bg11, x=predictors11)
+maxBothTest11 #print results
+threshold(maxBothTest11) #identify threshold for presence or absence
+plot(maxBothTest11, 'ROC') #plot AUC
+# alternative methods for testing models (should give same answers)
+# Alternative 1: another way to test model for both cytotypes
+pvtest11 <- data.frame(extract(predictors11, bothTest11))
+avtest11 <- data.frame(extract(predictors11, bg11))
+# cross-validate model
+maxBothTest211 <- evaluate(maxBothTrain11, p=pvtest11, a=avtest11)
+maxBothTest211
+# Alternative 2: predict to testing points for both cytotypes
+testp11 <- predict(maxBothTrain11, pvtest11)
+testa11 <- predict(maxBothTrain11, avtest11)
+maxBothTest311 <- evaluate(p=testp11, a=testa11)
+maxBothTest311
+# maxent with jackknife, random seed, and response curves, followed by cross
+#jackknife not run because only one layer in predictor11
+maxBothAdv11 <- maxent(
+  x=predictors11,
+  p=both,
+  removeDuplicates=TRUE,
+  nbg=10000,
+  args=c(
+    'randomseed=true', #default=false
+    'threads=2', #default=1
+    'responsecurves=true', #default=false
+    'replicates=10', #default=1
+    'replicatetype=crossvalidate',
+    'maximumiterations=1000' #default=500
+  )
+)
+maxBothAdv11 #view output as html
+response(maxBothAdv11) # show response curves for each layer
+rBothAdv11 <- predict(maxBothAdv11, predictors11) # create model
+plot(rBothAdv11) # plot predictive model
+points(tetraploid) # add points to predictive model
+writeRaster(rBothAdv11, "models/bothAdv2011.grd")
