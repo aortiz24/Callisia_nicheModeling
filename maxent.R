@@ -44,14 +44,32 @@ ppt1 <- raster("layers/avg_2014_ppt0.asc", crs=CRS)
 tmax1 <- raster("layers/avg_2014_tmax0.asc", crs=CRS)
 tmean1 <- raster("layers/avg_2014_tmean0.asc", crs=CRS)
 tmin1 <- raster("layers/avg_2014_tmin0.asc", crs=CRS)
+ppt9 <- raster("layers/ppt9.asc")
+tmax9 <- raster("layers/tmax9.asc")
+tmean9 <- raster("layers/tmean9.asc")
+tmin9 <- raster("layers/tmin9.asc")
+vpdmax9 <- raster("layers/vpdmax9.asc")
+vpdmin9 <- raster("layers/vpdmin9.asc")
+tdmean9 <- raster("layers/tdmean9.asc")
+ppt11 <- raster("layers/ppt11.asc")
+tmax11 <- raster("layers/tmax11.asc")
+tmean11 <- raster("layers/tmean11.asc")
+tmin11 <- raster("layers/tmin11.asc")
+vpdmax11 <- raster("layers/vpdmax11.asc")
+vpdmin11 <- raster("layers/vpdmin11.asc")
+tdmean11 <- raster("layers/tdmean11.asc")
 
 ## create stack of non-correlated layers (as determined by layerPrep.R)
 predictors0<- stack(ppt0)
 predictors1<- stack(ppt1,tmax1)
+predictors9<- stack(tmean9, vpdmin9)
+predictors11<- stack(tmin11, ppt11, vpdmin11)
 
 # plot each layer individually
 plot(predictors0)
 plot(predictors1)
+plot(predictors9)
+plot(predictors11)
 
 ### basic bioclim modeling with PRISM 1930 layers for diploids then tetraploids
 # extract layer data for each point
