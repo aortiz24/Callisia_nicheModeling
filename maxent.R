@@ -44,20 +44,20 @@ ppt1 <- raster("layers/avg_2014_ppt0.asc", crs=CRS)
 tmax1 <- raster("layers/avg_2014_tmax0.asc", crs=CRS)
 tmean1 <- raster("layers/avg_2014_tmean0.asc", crs=CRS)
 tmin1 <- raster("layers/avg_2014_tmin0.asc", crs=CRS)
-ppt9 <- raster("layers/ppt9.asc")
-tmax9 <- raster("layers/tmax9.asc")
-tmean9 <- raster("layers/tmean9.asc")
-tmin9 <- raster("layers/tmin9.asc")
-vpdmax9 <- raster("layers/vpdmax9.asc")
-vpdmin9 <- raster("layers/vpdmin9.asc")
-tdmean9 <- raster("layers/tdmean9.asc")
-ppt11 <- raster("layers/ppt11.asc")
-tmax11 <- raster("layers/tmax11.asc")
-tmean11 <- raster("layers/tmean11.asc")
-tmin11 <- raster("layers/tmin11.asc")
-vpdmax11 <- raster("layers/vpdmax11.asc")
-vpdmin11 <- raster("layers/vpdmin11.asc")
-tdmean11 <- raster("layers/tdmean11.asc")
+ppt9 <- raster("layers/ppt9.asc", crs=CRS)
+tmax9 <- raster("layers/tmax9.asc", crs=CRS)
+tmean9 <- raster("layers/tmean9.asc", crs=CRS)
+tmin9 <- raster("layers/tmin9.asc", crs=CRS)
+vpdmax9 <- raster("layers/vpdmax9.asc", crs=CRS)
+vpdmin9 <- raster("layers/vpdmin9.asc", crs=CRS)
+tdmean9 <- raster("layers/tdmean9.asc", crs=CRS)
+ppt11 <- raster("layers/ppt11.asc", crs=CRS)
+tmax11 <- raster("layers/tmax11.asc", crs=CRS)
+tmean11 <- raster("layers/tmean11.asc", crs=CRS)
+tmin11 <- raster("layers/tmin11.asc", crs=CRS)
+vpdmax11 <- raster("layers/vpdmax11.asc", crs=CRS)
+vpdmin11 <- raster("layers/vpdmin11.asc", crs=CRS)
+tdmean11 <- raster("layers/tdmean11.asc", crs=CRS)
 
 ## create stack of non-correlated layers (as determined by layerPrep.R)
 predictors0<- stack(ppt0)
@@ -503,7 +503,7 @@ plot(rBothAdv1) # plot predictive model
 points(tetraploid) # add points to predictive model
 writeRaster(rBothAdv1, "models/bothAdv2014.grd")
 
-### basic bioclim modeling with PRISM 1930 layers for diploids then tetraploids
+### basic bioclim modeling with PRISM 1929 layers for diploids then tetraploids
 # extract layer data for each point
 dipPts9 <- extract(predictors9, diploid)
 # create bioclim model
@@ -591,7 +591,6 @@ testa9 <- predict(maxDipTrain9, avtest9)
 maxDipTest39 <- evaluate(p=testp9, a=testa9)
 maxDipTest39
 # maxent with jackknife, random seed, and response curves, followed by cross
-#jackknife not run because only one layer in predictor9
 maxDipAdv9 <- maxent(
   x=predictors9,
   p=diploid,
@@ -644,7 +643,6 @@ testa9 <- predict(maxTetraTrain9, avtest9)
 maxTetraTest39 <- evaluate(p=testp9, a=testa9)
 maxTetraTest39
 # maxent with jackknife, random seed, and response curves, followed by cross-validation
-#jackknife not run because only one layer in predictor9
 maxTetraAdv9 <- maxent(
   x=predictors9,
   p=tetraploid,
@@ -697,7 +695,6 @@ testa9 <- predict(maxBothTrain9, avtest9)
 maxBothTest39 <- evaluate(p=testp9, a=testa9)
 maxBothTest39
 # maxent with jackknife, random seed, and response curves, followed by cross
-#jackknife not run because only one layer in predictor9
 maxBothAdv9 <- maxent(
   x=predictors9,
   p=both,
@@ -719,7 +716,7 @@ plot(rBothAdv9) # plot predictive model
 points(tetraploid) # add points to predictive model
 writeRaster(rBothAdv9, "models/bothAdv1929.grd")
 
-### basic bioclim modeling with PRISM 1930 layers for diploids then tetraploids
+### basic bioclim modeling with PRISM 2011 layers for diploids then tetraploids
 # extract layer data for each point
 dipPts11 <- extract(predictors11, diploid)
 # create bioclim model
@@ -807,7 +804,6 @@ testa11 <- predict(maxDipTrain11, avtest11)
 maxDipTest311 <- evaluate(p=testp11, a=testa11)
 maxDipTest311
 # maxent with jackknife, random seed, and response curves, followed by cross
-#jackknife not run because only one layer in predictor11
 maxDipAdv11 <- maxent(
   x=predictors11,
   p=diploid,
@@ -860,7 +856,6 @@ testa11 <- predict(maxTetraTrain11, avtest11)
 maxTetraTest311 <- evaluate(p=testp11, a=testa11)
 maxTetraTest311
 # maxent with jackknife, random seed, and response curves, followed by cross-validation
-#jackknife not run because only one layer in predictor11
 maxTetraAdv11 <- maxent(
   x=predictors11,
   p=tetraploid,
@@ -913,7 +908,6 @@ testa11 <- predict(maxBothTrain11, avtest11)
 maxBothTest311 <- evaluate(p=testp11, a=testa11)
 maxBothTest311
 # maxent with jackknife, random seed, and response curves, followed by cross
-#jackknife not run because only one layer in predictor11
 maxBothAdv11 <- maxent(
   x=predictors11,
   p=both,
