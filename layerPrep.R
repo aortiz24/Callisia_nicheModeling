@@ -117,8 +117,8 @@ corr9 <- layerStats(stack9, 'pearson', na.rm=TRUE)
 c9 <- corr9$`pearson correlation coefficient`
 write.csv(c9, "correlation1929.csv")
 # inspect output for correlations between layers
-#   0.7 and above (or -0.7 and below) are correlated
-#   for this analysis, retain tmean9, ppt9, vpdmin9
+# absolute value of 0.7 or greater are correlated
+# for this analysis, retain tmean9, ppt9, vpdmin9
 
 ###Past 2011
 ## load PRISM2011 ppt layers
@@ -213,5 +213,5 @@ corr11 <- layerStats(stack11, 'pearson', na.rm=TRUE)
 c11 <- corr11$`pearson correlation coefficient`
 write.csv(c11, "correlation2011.csv")
 # inspect output for correlations between layers
-#   0.7 and above (or -0.7 and below) are correlated
-#   for this analysis, retain tmean11, ppt11, vpdmax11, vpdmin11
+# absolute value of 0.7 or greater are correlated
+# for this analysis, retain tmean11, ppt11, vpdmax11, vpdmin11
