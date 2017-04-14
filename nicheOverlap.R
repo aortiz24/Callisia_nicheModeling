@@ -62,13 +62,13 @@ tetraPts11<-na.omit(tetraPts11)#removing NA values
 bothPts9 <- as.data.frame(rbind(dipPts9, tetraPts9))
 bothPts11 <- as.data.frame(rbind(dipPts11, tetraPts11))
 
+#import occurrence data for both Callisia cytotypes
+both <- read.csv(file="both.csv")
+
 ###Using PRISM 1929 weather data
 ##Instead of using an ANOVA, I will use a Logistic Regression
 #independent continuous variables:weather layers
 #dependent categoric variable:species/ploidy column
-
-#import occurrence data for both Callisia cytotypes
-both <- read.csv(file="both.csv")
 
 #to make the dataframe with columns: cytotype labels, latitude,longitude, environmental variables containing extracted data 
 #1929
@@ -138,10 +138,10 @@ colnames(x.env.pcnm11)
 
 #2011 - Look at the column names in the data frame "x.env.pcnm11". 
 #Put all the columns named "PCNM..." into the model below, 
-#followed by all the environmental variable columns starting with "std..."
-model.lrm11 <- lrm(x.env.pcnm11[,"cytotype"] ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + std.tmean11 + std.ppt11 + std.vpdmin11 + std.tdmean11, y = TRUE, data=x.env.pcnm11, penalty = 0.001)
+#followed by all the environmental variable columns starting with "std."
+model.lrm11 <- glm(cytotype ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + std.tmean11 + std.ppt11 + std.vpdmin11 + std.tdmean11, family = binomial(link = "logit"), data=x.env.pcnm11)
 
 #view results, variables with a p-value[Pr(>|z|)] of <0.05 are significant
 #the PCNM variables are adjusting for spatial autocorrelation, 
 #and allow me to make bolder statements about the variables that are influencing cytotype distribution
-model.lrm11
+summary(model.lrm11)
