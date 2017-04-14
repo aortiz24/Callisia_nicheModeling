@@ -75,10 +75,6 @@ both <- read.csv(file="both.csv")
 master9<- cbind(both,bothPts9)
 master9<- master9[,-4] 
 
-#2011
-master11<- cbind(both,bothPts11)
-master11<- master11[,-4] 
-
 #enter dataframe in logistic regression code
 x9 <-master9
 colnames(x9) <- tolower(colnames(x9))
@@ -103,5 +99,49 @@ colnames(x.env.pcnm9)
 #1929 - Look at the column names in the data frame "x.env.pcnm9". 
 #Put all the columns named "PCNM..." into the model below, 
 #followed by all the environmental variable columns starting with "std..."
-model.lrm9 <- lrm(x.env.pcnm9[,"cytotype"] ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + std.avg_1929_ppt9, y = TRUE, data=x.env.pcnm9, penalty = 0.001)
+model.lrm9 <- lrm(x.env.pcnm9[,"cytotype"] ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + std.tmean9 + std.ppt9 + std.vpdmax9, y = TRUE, data=x.env.pcnm9, penalty = 0.001)
 
+#view results, variables with a p-value[Pr(>|z|)] of <0.05 are significant
+#the PCNM variables are adjusting for spatial autocorrelation, 
+#and allow me to make bolder statements about the variables that are influencing cytotype distribution
+model.lrm9
+
+###Using PRISM 2011 weather data
+##Instead of using an ANOVA, I will use a Logistic Regression
+#independent continuous variables:weather layers
+#dependent categoric variable:species/ploidy column
+
+#to make the dataframe with columns: cytotype labels, latitude,longitude, environmental variables containing extracted data
+#2011
+master11<- cbind(both,bothPts11)
+master11<- master11[,-4] 
+
+x11 <-master11
+colnames(x11) <- tolower(colnames(x11))
+x11[,2] <- as.numeric(x11[,2])
+x11[,3] <- as.numeric(x11[,3])
+
+#set up matrix to correct for spatial autocorrelation in logistic regression for 2011 
+x.matrix11 <- earth.dist(x11[,c("latitude", "longitude")])
+x.matrix11 <- as.matrix(x.matrix11)
+pcnm.x.matrix11 <- pcnm(x.matrix11)
+x.env.pcnm11 <- cbind(x11, pcnm.x.matrix11$vectors[,1:round((length(which(pcnm.x.matrix11$values > 0)))/2)])
+
+for(i in 4:ncol(x11)){
+  
+  x.env.pcnm11 <- cbind(x.env.pcnm11, scale(x.env.pcnm11[,i], scale = sd(x.env.pcnm11[,i], na.rm = TRUE)))
+  colnames(x.env.pcnm11)[ncol(x.env.pcnm11)] <- paste("std", colnames(x11)[i], sep = ".")
+  
+}
+
+colnames(x.env.pcnm11)
+
+#2011 - Look at the column names in the data frame "x.env.pcnm11". 
+#Put all the columns named "PCNM..." into the model below, 
+#followed by all the environmental variable columns starting with "std..."
+model.lrm11 <- lrm(x.env.pcnm11[,"cytotype"] ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + std.tmean11 + std.ppt11 + std.vpdmin11 + std.tdmean11, y = TRUE, data=x.env.pcnm11, penalty = 0.001)
+
+#view results, variables with a p-value[Pr(>|z|)] of <0.05 are significant
+#the PCNM variables are adjusting for spatial autocorrelation, 
+#and allow me to make bolder statements about the variables that are influencing cytotype distribution
+model.lrm11
