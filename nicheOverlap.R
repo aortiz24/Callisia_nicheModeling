@@ -104,7 +104,13 @@ model.lrm9 <- lrm(x.env.pcnm9[,"cytotype"] ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCN
 #view results, variables with a p-value[Pr(>|z|)] of <0.05 are significant
 #the PCNM variables are adjusting for spatial autocorrelation, 
 #and allow me to make bolder statements about the variables that are influencing cytotype distribution
-model.lrm9
+summary(model.lrm9)
+
+# 1929 logistic regression model results
+sink("logistic_regression_results/logistic-regression9.txt")#creates a text file called logistic-regression9.txt in your logistic_regression_results directory
+print(model.lrm9)
+print(summary(model.lrm9))
+sink()
 
 ###Using PRISM 2011 weather data
 ##Instead of using an ANOVA, I will use a Logistic Regression
@@ -145,3 +151,9 @@ model.lrm11 <- glm(cytotype ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PC
 #the PCNM variables are adjusting for spatial autocorrelation, 
 #and allow me to make bolder statements about the variables that are influencing cytotype distribution
 summary(model.lrm11)
+
+#2011 logistic regression model results
+sink("logistic_regression_results/logistic-regression11.txt")#creates a text file called logistic-regression11.txt in your logistic_regression_results directory
+print(model.lrm11)
+print(summary(model.lrm11))
+sink()
