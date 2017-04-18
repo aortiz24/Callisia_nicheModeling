@@ -1,0 +1,48 @@
+
+Call:  glm(formula = cytotype ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + 
+    PCNM6 + PCNM7 + PCNM8 + std.tmean11 + std.ppt11 + std.vpdmin11 + 
+    std.tdmean11, family = binomial(link = "logit"), data = x.env.pcnm11)
+
+Coefficients:
+ (Intercept)         PCNM1         PCNM2         PCNM3         PCNM4         PCNM5         PCNM6  
+      378.55         84.85       5740.16       6083.06        603.39      -2487.44        657.25  
+       PCNM7         PCNM8   std.tmean11     std.ppt11  std.vpdmin11  std.tdmean11  
+     -901.67       -753.41        -96.38        -53.54        356.89         65.80  
+
+Degrees of Freedom: 109 Total (i.e. Null);  97 Residual
+Null Deviance:	    130.8 
+Residual Deviance: 2.21e-07 	AIC: 26
+
+Call:
+glm(formula = cytotype ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + 
+    PCNM6 + PCNM7 + PCNM8 + std.tmean11 + std.ppt11 + std.vpdmin11 + 
+    std.tdmean11, family = binomial(link = "logit"), data = x.env.pcnm11)
+
+Deviance Residuals: 
+       Min          1Q      Median          3Q         Max  
+-2.132e-04  -2.100e-08   2.100e-08   2.100e-08   2.107e-04  
+
+Coefficients:
+               Estimate Std. Error z value Pr(>|z|)
+(Intercept)      378.55   49331.79   0.008    0.994
+PCNM1             84.85  686511.78   0.000    1.000
+PCNM2           5740.16  843350.87   0.007    0.995
+PCNM3           6083.06 3262723.34   0.002    0.999
+PCNM4            603.39  749701.73   0.001    0.999
+PCNM5          -2487.44 1017095.61  -0.002    0.998
+PCNM6            657.25 2066801.74   0.000    1.000
+PCNM7           -901.67  173127.37  -0.005    0.996
+PCNM8           -753.41  341329.54  -0.002    0.998
+std.tmean11      -96.38  364002.35   0.000    1.000
+std.ppt11        -53.54   25594.67  -0.002    0.998
+std.vpdmin11     356.89   65057.83   0.005    0.996
+std.tdmean11      65.80  246089.01   0.000    1.000
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1.3083e+02  on 109  degrees of freedom
+Residual deviance: 2.2097e-07  on  97  degrees of freedom
+AIC: 26
+
+Number of Fisher Scoring iterations: 25
+
