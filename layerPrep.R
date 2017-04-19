@@ -130,7 +130,7 @@ projection(ppt_4kmM3_11) <- CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0
 ## clip data layers
 ppt_11 <- mask(ppt_4kmM3_11, SEstates)
 ppt.11 <- crop(ppt_11, extent(SEstates))
-writeRaster(ppt.11, "~/Documents/Thesis//data/PastLayers_clipped/2011/ppt11.asc", format="ascii", overwrite=TRUE)
+writeRaster(ppt.11, "~/Documents/Thesis/data/PastLayers_clipped/2011/ppt11.asc", format="ascii", overwrite=TRUE)
 
 ## load PRISM2011 tmax layers
 tmax_4kmM2_11 <- raster("~/Documents/Thesis/data/dataLayers/PRISM2011/PRISM_tmax_stable_4kmM2_2011_all_bil/PRISM_tmax_stable_4kmM2_2011_bil.bil")
@@ -141,7 +141,7 @@ projection(tmax_4kmM2_11) <- CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,
 ## clip data layers
 tmax_11 <- mask(tmax_4kmM2_11, SEstates)
 tmax.11 <- crop(tmax_11, extent(SEstates))
-writeRaster(tmax.11, "~/Documents/Thesis//data/PastLayers_clipped/2011/tmax11.asc", format="ascii", overwrite=TRUE)
+writeRaster(tmax.11, "~/Documents/Thesis/data/PastLayers_clipped/2011/tmax11.asc", format="ascii", overwrite=TRUE)
 
 ## load PRISM2011 tmean layers
 tmean_4kmM2_11 <- raster("~/Documents/Thesis/data/dataLayers/PRISM2011/PRISM_tmean_stable_4kmM2_2011_all_bil/PRISM_tmean_stable_4kmM2_2011_bil.bil")
@@ -152,7 +152,7 @@ projection(tmean_4kmM2_11) <- CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0
 ## clip data layers
 tmean_11 <- mask(tmean_4kmM2_11, SEstates)
 tmean.11 <- crop(tmean_11, extent(SEstates))
-writeRaster(tmean.11, "~/Documents/Thesis//data/PastLayers_clipped/2011/tmean11.asc", format="ascii", overwrite=TRUE)
+writeRaster(tmean.11, "~/Documents/Thesis/data/PastLayers_clipped/2011/tmean11.asc", format="ascii", overwrite=TRUE)
 
 ## load PRISM2011 tmin layers
 tmin_4kmM2_11 <- raster("~/Documents/Thesis/data/dataLayers/PRISM2011/PRISM_tmin_stable_4kmM2_2011_all_bil/PRISM_tmin_stable_4kmM2_2011_bil.bil")
