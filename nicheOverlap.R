@@ -106,7 +106,7 @@ model.lrm9 <- lrm(x.env.pcnm9[,"cytotype"] ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCN
 #and allow me to make bolder statements about the variables that are influencing cytotype distribution
 summary(model.lrm9)
 
-# 1929 logistic regression model results
+#1929 logistic regression model results
 sink("logistic_regression_results/logistic-regression9.txt")#creates a text file called logistic-regression9.txt in your logistic_regression_results directory
 print(model.lrm9)
 print(summary(model.lrm9))
@@ -122,6 +122,7 @@ sink()
 master11<- cbind(both,bothPts11)
 master11<- master11[,-4] 
 
+#enter dataframe in logistic regression code
 x11 <-master11
 colnames(x11) <- tolower(colnames(x11))
 x11[,2] <- as.numeric(x11[,2])
