@@ -158,3 +158,83 @@ sink("logistic_regression_results/logistic-regression11.txt")#creates a text fil
 print(model.lrm11)
 print(summary(model.lrm11))
 sink()
+
+## principle component analysis(PCA) for 1929
+bothNum9 <- bothPts9[ ,-1] #remove species names
+pca_both9 <- prcomp(bothNum9, center = TRUE, scale. = TRUE) #PCA=Error because only has one weather variable
+print(pca_both9) #print deviations and rotations=Error because only has one weather variable
+summary(pca_both9) #print importance of components=Error because only has one weather variable
+plot(pca_both9, type="l") #plot variances=Error because only has one weather variable
+ncomp <- 1#specify number of components to load (representing 99% of variation)=Error because only has one weather variable
+
+## principle component analysis(PCA) for 2011
+bothNum11 <- bothPts11[ ,-1] #remove species names
+pca_both11 <- prcomp(bothNum11, center = TRUE, scale. = TRUE) #PCA=Error because only has one weather variable
+print(pca_both11) #print deviations and rotations=Error because only has one weather variable
+summary(pca_both11) #print importance of components=Error because only has one weather variable
+plot(pca_both11, type="l") #plot variances=Error because only has one weather variable
+ncomp <- 1#specify number of components to load (representing 99% of variation)=Error because only has one weather variable
+
+
+## model-based approaches
+# read in default maxent models
+rDip9 <- raster("models/diploid1929.grd")
+rTetra9 <- raster("models/tetraploid1929.grd")
+rBoth9<- raster("models/both1929.grd")
+
+# assessing niche overlap by comparing diploids and tetraploids in 1929
+nicheOverlap(rDip9, rTetra9, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rDip9, rTetra9, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+# read in advanced maxent models
+rDipAdv9 <- raster("models/diploidAdv1929.grd")
+rTetraAdv9 <- raster("models/tetraploidAdv1929.grd")
+rBothAdv9 <- raster("models/bothAdv1929.grd")
+
+# assessing niche overlap by comparing diploids and tetraploids in 1929
+nicheOverlap(rDipAdv9, rTetraAdv9, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rDipAdv9, rTetraAdv9, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+
+## model-based approaches
+# read in default maxent models
+rDip11 <- raster("models/diploid2011.grd")
+rTetra11 <- raster("models/tetraploid2011.grd")
+rBoth11<- raster("models/both2011.grd")
+
+# assessing niche overlap by comparing diploids and tetraploids in 2011
+nicheOverlap(rDip11, rTetra11, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rDip11, rTetra11, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+# read in advanced maxent models
+rDipAdv11 <- raster("models/diploidAdv2011.grd")
+rTetraAdv11 <- raster("models/tetraploidAdv2011.grd")
+rBothAdv11 <- raster("models/bothAdv2011.grd")
+
+# assessing niche overlap by comparing diploids and tetraploids in 2011
+nicheOverlap(rDipAdv11, rTetraAdv11, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rDipAdv11, rTetraAdv11, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+#assessing changes in diploid niche from 1929 to 2011
+nicheOverlap(rDip9, rDip11, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rDip9, rDip11, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+#assessing changes in tetraploid niche from 1929 to 2011
+nicheOverlap(rTetra9, rTetra11, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rTetra9, rTetra11, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+#assessing changes in both cytotypes niche from 1929 to 2011
+nicheOverlap(rBoth9, rBoth11, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rBoth9, rBoth11, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+#assessing changes in diploid niche from 1929 to 2011
+nicheOverlap(rDipAdv9, rDipAdv11, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rDipAdv9, rDipAdv11, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+#assessing changes in tetraploid niche from 1929 to 2011
+nicheOverlap(rTetraAdv9, rTetraAdv11, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rTetraAdv9, rTetraAdv11, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
+
+#assessing changes in both cytotypes niche from 1929 to 2011
+nicheOverlap(rBothAdv9, rBothAdv11, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
+nicheOverlap(rBothAdv9, rBothAdv11, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
