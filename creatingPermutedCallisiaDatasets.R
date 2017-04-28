@@ -58,7 +58,7 @@ for (i in 1:100){
   #making two objects for both cytotypes that are permuted datasets: 
   #x.permuted.object contains half of the both cytotypes occurrence points and will be run in maxent with 1929 layers in for loop
   #x.permuted.object2 contains half of the both cytotypes occurrence points and will be run in maxent with 2011 layers in for loop
-  #assign 10 occurrence points from the both cytotypes object to the x.permuted object and do not replace the values
+  #assign 57 occurrence points from the both cytotypes object to the x.permuted object and do not replace the values
   x.permuted<-replicate(100, {sample(1:nrow(both), size = 57, replace = FALSE)
     #contains the row names of the both cytotypes object in numerical order. The information in these rows will be put into x.permuted. 
     x.permuted <- x.permuted[order(x.permuted)]
