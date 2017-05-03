@@ -10,7 +10,7 @@ dir.create("permutation_results")
 
 ## import occurrence data and convert to format required by maxent
 Callisia.both <- read.csv(file="CallisiaCompletedData.csv") %>%
-  select(Cytotype,Latitude,Longitude)
+  dplyr::select(Cytotype,Latitude,Longitude)
 Callisia.both <- na.omit(Callisia.both)
 diploid <- Callisia.both %>%
   filter(Cytotype=="2X") 
@@ -22,7 +22,7 @@ tetraploid <- tetraploid[,c(3,2)]
 tetraploid<- tetraploid[-c(10,46,56), ]
 #occurrence data for both Callisia cytotypes
 Callisia.both <- read.csv(file="CallisiaCompletedData.csv") %>%
-  select(Cytotype,Latitude,Longitude)
+  dplyr::select(Cytotype,Latitude,Longitude)
 both <- Callisia.both[,c(3,2)]
 both <- na.omit(both)
 
