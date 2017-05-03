@@ -49,24 +49,25 @@ tdmean11 <- raster("layers/tdmean11.asc", crs=CRS)
 predictors9<- stack(tmean9, ppt9, vpdmin9)
 predictors11<- stack(tmean11, ppt11, vpdmax11, vpdmin11)
 
-##For loop for diploids - 1929 vs 2011
-#one dataset will run 100 times with 1929 layers in maxent, and an I statistic will be calculated for each run
-#the other dataset will run 100 times with 2011 layers in maxent, and an I statistic will be calculated for each run
-#The critical value (the fifth lowest I statistic out of 100) will be used to conclude whether the niches are significantly different for 1929 and 2011
-sink("permutation_results/diploid_permut_vals.csv")#creates a csv file called diploid_permut_vals.csv in your permutation_results directory
-for (i in 1:100){
-  #making two objects for diploids that are permuted datasets: 
-  #x.permutedA contains half of the diploids occurrence points and will be run in maxent with 1929 layers in for loop
-  #x.permutedA2 contains half of the diploids occurrence points and will be run in maxent with 2011 layers in for loop
-  #assign 15 occurrence points from the diploid to the x.permutedA and do not replace the values
-  x.permutedA<-replicate(100, {sample(1:nrow(diploid), size = 15, replace = FALSE)
-    #contains the row names of the diploid object in numerical order. The information in these rows will be put into x.permutedA 
-    x.permutedA <- x.permutedA[order(x.permutedA)]
-    #put the remaining row names of the diploid object into x.permutedA2. 
-    x.permutedA2 <- setdiff(1:nrow(diploid), x.permutedA)
-    #contains the row names of the diploid object in numerical order. The information in these rows will be put into x.permutedA2. 
-    x.permutedA2 <- x.permutedA2[order(x.permutedA2)]
-  })
+#making two objects for diploids that are permuted datasets: 
+#x.permutedA contains half of the diploids occurrence points and will be run in maxent with 1929 layers in for loop
+#x.permutedA2 contains half of the diploids occurrence points and will be run in maxent with 2011 layers in for loop
+#assign 15 occurrence points from the diploid to the x.permutedA and do not replace the values
+x.permutedA<-replicate(100, {sample(1:nrow(diploid), size = 15, replace = FALSE)
+#contains the row names of the diploid object in numerical order. The information in these rows will be put into x.permutedA 
+x.permutedA <- x.permutedA[order(x.permutedA)]
+#put the remaining row names of the diploid object into x.permutedA2. 
+x.permutedA2 <- setdiff(1:nrow(diploid), x.permutedA)
+#contains the row names of the diploid object in numerical order. The information in these rows will be put into x.permutedA2. 
+x.permutedA2 <- x.permutedA2[order(x.permutedA2)]
+})
+  
+  ##For loop for diploids - 1929 vs 2011
+  #one dataset will run 100 times with 1929 layers in maxent, and an I statistic will be calculated for each run
+  #the other dataset will run 100 times with 2011 layers in maxent, and an I statistic will be calculated for each run
+  #The critical value (the fifth lowest I statistic out of 100) will be used to conclude whether the niches are significantly different for 1929 and 2011
+  sink("permutation_results/diploid_permut_vals.csv")#creates a csv file called diploid_permut_vals.csv in your permutation_results directory
+  for (i in 1:100){
   
   #import specific rows of diploid locality data into x.permutedA and x.permutedA2
   #creates paired datasets
