@@ -12,7 +12,7 @@ library(rms)
 ## multi-variate climate space comparisons (standard statistical testing, non-model based)
 # import occurrence data and convert to format required by maxent
 Callisia.both <- read.csv(file="CallisiaCompletedData.csv") %>%
-  select(Cytotype,Latitude,Longitude)
+  dplyr::select(Cytotype,Latitude,Longitude)
 Callisia.both <- na.omit(Callisia.both)
 diploid <- Callisia.both %>%
   filter(Cytotype=="2X")
