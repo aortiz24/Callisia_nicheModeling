@@ -216,18 +216,17 @@ y[5]
 #The critical value (the fifth lowest I statistic out of 100) will be used to conclude whether the niches are significantly different for 1929 and 2011
 sink("permutation_results/both_cytotypes_permut_vals.csv")#creates a csv file called both_cytotypes_permut_vals.csv in your permutation_results directory
 for (i in 1:100){
-  #making two objects for both cytotypes that are permuted datasets: 
+  #making two objects for both cytotypes that are permuted datasets:
   #x.permutedC contains half of the both cytotypes occurrence points and will be run in maxent with 1929 layers in for loop
   #x.permutedC2 contains half of the both cytotypes occurrence points and will be run in maxent with 2011 layers in for loop
   #assign 57 occurrence points from the both cytotypes object to the x.permutedC and do not replace the values
-  x.permutedC<-replicate(100, {sample(1:nrow(both), size = 57, replace = FALSE)
-    #contains the row names of the both cytotypes object in numerical order. The information in these rows will be put into x.permutedC. 
-    x.permutedC <- x.permutedC[order(x.permutedC)]
-    #put the remaining row names of the both cytotypes object into x.permutedC2. 
-    x.permutedC2 <- setdiff(1:nrow(both), x.permutedC)
-    #contains the row names of the both cytotypes object in numerical order. The information in these rows will be put into x.permutedC2. 
-    x.permutedC2 <- x.permutedC2[order(x.permutedC2)]
-  })
+  x.permutedC<-sample(1:nrow(both), size = 55, replace = FALSE)
+  #contains the row names of the both cytotypes object in numerical order. The information in these rows will be put into x.permutedC.
+  x.permutedC <- x.permutedC[order(x.permutedC)]
+  #put the remaining row names of the both cytotypes object into x.permutedC2.
+  x.permutedC2 <- setdiff(1:nrow(both), x.permutedC)
+  #contains the row names of the both cytotypes object in numerical order. The information in these rows will be put into x.permutedC2. 
+  x.permutedC2 <- x.permutedC2[order(x.permutedC2)]
   
   #import specific rows of both cytotypes locality data into x.permutedC and x.permutedC2
   #creates paired datasets
