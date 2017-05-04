@@ -55,20 +55,20 @@ predictors11<- stack(tmean11, ppt11, vpdmax11, vpdmin11)
 #The critical value (the fifth lowest I statistic out of 100) will be used to conclude whether the niches are significantly different for 1929 and 2011
 sink("permutation_results/diploid_permut_vals.csv")#creates a csv file called diploid_permut_vals.csv in your permutation_results directory
 for (i in 1:100){
-
-#making two objects for diploids that are permuted datasets: 
-#x.permutedA contains half of the diploids occurrence points and will be run in maxent with 1929 layers in for loop
-#x.permutedA2 contains half of the diploids occurrence points and will be run in maxent with 2011 layers in for loop
-#assign 15 occurrence points from the diploid to the x.permutedA and do not replace the values
-x.permutedA<-sample(1:nrow(diploid), size = 15, replace = FALSE)
-#contains the row names of the diploid object in numerical order. The information in these rows will be put into x.permutedA 
-x.permutedA <- x.permutedA[order(x.permutedA)]
-#put the remaining row names of the diploid object into x.permutedA2. 
-x.permutedA2 <- setdiff(1:nrow(diploid), x.permutedA)
-#contains the row names of the diploid object in numerical order. The information in these rows will be put into x.permutedA2. 
-x.permutedA2 <- x.permutedA2[order(x.permutedA2)]
-
-    #import specific rows of diploid locality data into x.permutedA and x.permutedA2
+  
+  #making two objects for diploids that are permuted datasets: 
+  #x.permutedA contains half of the diploids occurrence points and will be run in maxent with 1929 layers in for loop
+  #x.permutedA2 contains half of the diploids occurrence points and will be run in maxent with 2011 layers in for loop
+  #assign 15 occurrence points from the diploid to the x.permutedA and do not replace the values
+  x.permutedA<-sample(1:nrow(diploid), size = 15, replace = FALSE)
+  #contains the row names of the diploid object in numerical order. The information in these rows will be put into x.permutedA 
+  x.permutedA <- x.permutedA[order(x.permutedA)]
+  #put the remaining row names of the diploid object into x.permutedA2. 
+  x.permutedA2 <- setdiff(1:nrow(diploid), x.permutedA)
+  #contains the row names of the diploid object in numerical order. The information in these rows will be put into x.permutedA2. 
+  x.permutedA2 <- x.permutedA2[order(x.permutedA2)]
+  
+  #import specific rows of diploid locality data into x.permutedA and x.permutedA2
   #creates paired datasets
   x.permutedA.diploid1 <- diploid[(x.permutedA),]
   x.permutedA.diploid2 <- diploid[(x.permutedA2),]
@@ -114,15 +114,15 @@ x.permutedA2 <- x.permutedA2[order(x.permutedA2)]
   
   #print the 100 I statistics in the first column in diploid_permut_vals.csv
   print(DipAdvIstat)
-  }
+}
 sink()
 
 #The critical value (the fifth lowest I statistic out of 100,you only got a value lower than this 5% of the time, P<0.05) will be used to conclude whether the niches are significantly different for 1929 and 2011
-PermutIstats <- read.csv("permutation_results/diploid_permut_vals.csv")
+DipPermutIstats <- read.csv("permutation_results/diploid_permut_vals.csv")
 #assign first 100 rows to the R object
-PermutIstats <- PermutIstats[1:100,]
+DipPermutIstats <- DipPermutIstats[1:100,]
 #ordering permuted 100 I statistic values from least to greatest
-x<-sort(PermutIstats, decreasing = FALSE)
+x<-sort(DipPermutIstats, decreasing = FALSE)
 #writes the 100 I statistic values from least to greatest
 write.csv(x, file="permutation_results/diploid_OrderedPermutIstats.csv")
 #the critical value is the fifth lowest I statistic out of 100,
@@ -136,18 +136,19 @@ x[5]
 #The critical value (the fifth lowest I statistic out of 100) will be used to conclude whether the niches are significantly different for 1929 and 2011
 sink("permutation_results/tetraploid_permut_vals.csv")#creates a csv file called tetraploid_permut_vals.csv in your permutation_results directory
 for (i in 1:100){
+  
   #making two objects for tetraploids that are permuted datasets: 
   #x.permutedB contains half of the tetraploids occurrence points and will be run in maxent with 1929 layers in for loop
   #x.permutedB2 contains half of the tetraploids occurrence points and will be run in maxent with 2011 layers in for loop
   #assign 39 occurrence points from the tetraploid object to the x.permutedB and do not replace the values
-  x.permutedB<-replicate(100, {sample(1:nrow(tetraploid), size = 39, replace = FALSE)
-    #contains the row names of the tetraploid object in numerical order. The information in these rows will be put into x.permutedB. 
-    x.permutedB <- x.permutedB[order(x.permutedB)]
-    #put the remaining row names of the tetraploid object into x.permutedB2. 
-    x.permutedB2 <- setdiff(1:nrow(tetraploid), x.permutedB)
-    #contains the row names of the tetraploid object in numerical order. The information in these rows will be put into x.permutedB2. 
-    x.permutedB2 <- x.permutedB2[order(x.permutedB2)]
-  })
+  x.permutedB<-sample(1:nrow(tetraploid), size = 39, replace = FALSE)
+  #contains the row names of the tetraploid object in numerical order. The information in these rows will be put into x.permutedB. 
+  x.permutedB <- x.permutedB[order(x.permutedB)]
+  #put the remaining row names of the tetraploid object into x.permutedB2. 
+  x.permutedB2 <- setdiff(1:nrow(tetraploid), x.permutedB)
+  #contains the row names of the tetraploid object in numerical order. The information in these rows will be put into x.permutedB2. 
+  x.permutedB2 <- x.permutedB2[order(x.permutedB2)]
+  
   
   #import specific rows of tetraploid locality data into x.permutedB and x.permutedB2
   #creates paired datasets
@@ -199,16 +200,17 @@ for (i in 1:100){
 sink()
 
 #The critical value (the fifth lowest I statistic out of 100,you only got a value lower than this 5% of the time, P<0.05) will be used to conclude whether the niches are significantly different for 1929 and 2011
-PermutIstats <- read.csv("permutation_results/tetraploid_permut_vals.csv")
+TetraPermutIstats <- read.csv("permutation_results/tetraploid_permut_vals.csv")
 #assign first 100 rows to the R object
-PermutIstats <- PermutIstats[1:100,]
+TetraPermutIstats <- TetraPermutIstats[1:100,]
 #ordering permuted 100 I statistic values from least to greatest
-x<-sort(PermutIstats, decreasing = FALSE)
+y<-sort(TetraPermutIstats, decreasing = FALSE)
 #writes the 100 I statistic values from least to greatest
-write.csv(x, file="permutation_results/tetraploid_OrderedPermutIstats.csv")
+write.csv(y, file="permutation_results/tetraploid_OrderedPermutIstats.csv")
 #the critical value is the fifth lowest I statistic out of 100,
 #you only get a value lower than this 5% of the time, P<0.05)
 #When comparing the tetraploid niches in 1929 & 2011, the critical value is
+y[5]
 
 ##For loop for both cytotypes - 1929 vs 2011
 #one dataset will run 100 times with 1929 layers in maxent, and an I statistic will be calculated for each run
@@ -279,13 +281,14 @@ for (i in 1:100){
 sink()
 
 #The critical value (the fifth lowest I statistic out of 100,you only got a value lower than this 5% of the time, P<0.05) will be used to conclude whether the niches are significantly different for 1929 and 2011
-PermutIstats <- read.csv("permutation_results/both_cytotypes_permut_vals.csv")
+BothPermutIstats <- read.csv("permutation_results/both_cytotypes_permut_vals.csv")
 #assign first 100 rows to the R object
-PermutIstats <- PermutIstats[1:100,]
+BothPermutIstats <- BothPermutIstats[1:100,]
 #ordering permuted 100 I statistic values from least to greatest
-x<-sort(PermutIstats, decreasing = FALSE)
+z<-sort(BothPermutIstats, decreasing = FALSE)
 #writes the 100 I statistic values from least to greatest
-write.csv(x, file="permutation_results/both_cytotypes_OrderedPermutIstats.csv")
+write.csv(z, file="permutation_results/both_cytotypes_OrderedPermutIstats.csv")
 #the critical value is the fifth lowest I statistic out of 100,
 #you only get a value lower than this 5% of the time, P<0.05)
 #When comparing the both cytotypes niches in 1929 & 2011, the critical value is
+z[5]
