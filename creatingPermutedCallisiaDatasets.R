@@ -207,7 +207,7 @@ y<-sort(TetraPermutIstats, decreasing = FALSE)
 write.csv(y, file="permutation_results/tetraploid_OrderedPermutIstats.csv")
 #the critical value is the fifth lowest I statistic out of 100,
 #you only get a value lower than this 5% of the time, P<0.05)
-#When comparing the tetraploid niches in 1929 & 2011, the critical value is
+#When comparing the tetraploid niches in 1929 & 2011, the critical value is 0.9508259
 y[5]
 
 ##For loop for both cytotypes - 1929 vs 2011
