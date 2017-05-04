@@ -55,7 +55,6 @@ predictors11<- stack(tmean11, ppt11, vpdmax11, vpdmin11)
 #The critical value (the fifth lowest I statistic out of 100) will be used to conclude whether the niches are significantly different for 1929 and 2011
 sink("permutation_results/diploid_permut_vals.csv")#creates a csv file called diploid_permut_vals.csv in your permutation_results directory
 for (i in 1:100){
-  
   #making two objects for diploids that are permuted datasets: 
   #x.permutedA contains half of the diploids occurrence points and will be run in maxent with 1929 layers in for loop
   #x.permutedA2 contains half of the diploids occurrence points and will be run in maxent with 2011 layers in for loop
@@ -136,8 +135,7 @@ x[5]
 #The critical value (the fifth lowest I statistic out of 100) will be used to conclude whether the niches are significantly different for 1929 and 2011
 sink("permutation_results/tetraploid_permut_vals.csv")#creates a csv file called tetraploid_permut_vals.csv in your permutation_results directory
 for (i in 1:100){
-  
-  #making two objects for tetraploids that are permuted datasets: 
+    #making two objects for tetraploids that are permuted datasets: 
   #x.permutedB contains half of the tetraploids occurrence points and will be run in maxent with 1929 layers in for loop
   #x.permutedB2 contains half of the tetraploids occurrence points and will be run in maxent with 2011 layers in for loop
   #assign 39 occurrence points from the tetraploid object to the x.permutedB and do not replace the values
