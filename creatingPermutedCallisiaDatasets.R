@@ -287,5 +287,5 @@ z<-sort(BothPermutIstats, decreasing = FALSE)
 write.csv(z, file="permutation_results/both_cytotypes_OrderedPermutIstats.csv")
 #the critical value is the fifth lowest I statistic out of 100,
 #you only get a value lower than this 5% of the time, P<0.05)
-#When comparing the both cytotypes niches in 1929 & 2011, the critical value is
+#When comparing the both cytotypes niches in 1929 & 2011, the critical value is 0.9300597
 z[5]
