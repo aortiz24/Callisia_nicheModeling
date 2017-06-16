@@ -8,6 +8,8 @@ library(ENMeval)
 library(fossil)
 library(vegan)
 library(rms)
+library(devtools)
+library(ggbiplot)
 
 ## multi-variate climate space comparisons (standard statistical testing, non-model based)
 # import occurrence data and convert to format required by maxent
@@ -160,20 +162,30 @@ print(summary(model.lrm11))
 sink()
 
 ## principle component analysis(PCA) for 1929
+cytotypes9 <- bothPts9[ ,1] #holds names of varieites and will be used in PCA plot
 bothNum9 <- bothPts9[ ,-1] #remove species names
 pca_both9 <- prcomp(bothNum9, center = TRUE, scale. = TRUE) #PCA
 print(pca_both9) #print deviations and rotation
 summary(pca_both9) #print importance of components
 plot(pca_both9, type="l") #plot variances
-ncomp <- 3 #specify number of components to load (representing 99% of variation)
+ncomp <- 2 #specify number of components to load (representing 85% of variation)
+#make a PCA plot
+ggbiplot(pca_both9, obs.scale =1, var.scale = 1, groups= cytotypes9, ellipse = TRUE, circle = TRUE) +
+  scale_color_discrete(name = '') +
+  theme(legend.direction = 'horizontal', legend.position = 'top')
 
 ## principle component analysis(PCA) for 2011
+cytotypes11 <- bothPts11[ ,1] #holds names of varieites and will be used in PCA plot
 bothNum11 <- bothPts11[ ,-1] #remove species names
 pca_both11 <- prcomp(bothNum11, center = TRUE, scale. = TRUE) #PCA
 print(pca_both11) #print deviations and rotations
 summary(pca_both11) #print importance of components
 plot(pca_both11, type="l") #plot variances
-ncomp <- 4 #specify number of components to load (representing 99% of variation)
+ncomp <- 3 #specify number of components to load (representing 99% of variation)
+#make a PCA plot
+ggbiplot(pca_both11, obs.scale =1, var.scale = 1, groups= cytotypes11, ellipse = TRUE, circle = TRUE) +
+  scale_color_discrete(name = '') +
+  theme(legend.direction = 'horizontal', legend.position = 'top')
 
 
 ## model-based approaches
