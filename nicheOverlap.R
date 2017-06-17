@@ -148,7 +148,7 @@ colnames(x.env.pcnm11)
 #2011 - Look at the column names in the data frame "x.env.pcnm11". 
 #Put all the columns named "PCNM..." into the model below, 
 #followed by all the environmental variable columns starting with "std."
-model.lrm11 <- glm(cytotype ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + std.tmean11 + std.ppt11 + std.vpdmin11 + std.tdmean11, family = binomial(link = "logit"), data=x.env.pcnm11)
+model.lrm11 <- lrm(cytotype ~ PCNM1 + PCNM2 + PCNM3 + PCNM4 + PCNM5 + PCNM6 + PCNM7 + PCNM8 + std.tmean11 + std.ppt11 + std.vpdmin11 + std.tdmean11, family = binomial(link = "logit"), data=x.env.pcnm11)
 
 #view results, variables with a p-value[Pr(>|z|)] of <0.05 are significant
 #the PCNM variables are adjusting for spatial autocorrelation, 
