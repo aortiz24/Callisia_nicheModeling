@@ -118,7 +118,7 @@ writeRaster(rBoth9, "models/both1929.grd")
 # develop testing and training sets for diploid
 fold <- kfold(diploid, k=5) #split occurence points into 5 sets
 dipTest9 <- diploid[fold == 1, ] #take 20% (1/5) for testing
-dipTrain9 <- diploid[fold != 1, ] #leave 40% for training
+dipTrain9 <- diploid[fold != 1, ] #leave 80% for training
 # fit training model for diploid
 maxDipTrain9 <- maxent(predictors9, dipTrain9) #fit maxent model
 maxDipTrain9 #view results in html
