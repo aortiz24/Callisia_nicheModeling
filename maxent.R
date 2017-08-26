@@ -92,8 +92,7 @@ plot(bothBCpredict9)
 maxDip9 <- maxent(predictors9, diploid)
 maxDip9 # views results in browser window
 response(maxDip9) # show response curves for each layer
-rDip9 <- predict(maxDip9, predictors9) # create model
-plot(rDip9) # plot predictive model
+rDip9 <- predict(maxDip9, predictors9) # create modelplot(rDip9) # plot predictive model
 points(diploid) # add points to predictive model
 writeRaster(rDip9, "models/diploid1929.grd")
 
@@ -171,7 +170,7 @@ writeRaster(rDipAdv9, "models/diploidAdv1929.grd")
 # develop testing and training sets for tetraploid
 fold <- kfold(tetraploid, k=5) #split occurence points into 5 sets
 tetraTest9 <- tetraploid[fold == 1, ] #take 20% (1/5) for testing
-tetraTrain9 <- tetraploid[fold != 1, ] #leave 40% for training
+tetraTrain9 <- tetraploid[fold != 1, ] #leave 80% for training
 # fit training model for tetraploid
 maxTetraTrain9 <- maxent(predictors9, tetraTrain9) #fit maxent model
 maxTetraTrain9 #view results in html
