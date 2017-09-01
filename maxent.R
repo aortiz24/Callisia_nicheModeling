@@ -57,7 +57,9 @@ predictors11<- stack(tmean11, ppt11, vpdmax11, vpdmin11)
 
 # plot each layer individually
 plot(predictors9)
+#dev.copy2pdf(file="figures/Individual1929Layers.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 plot(predictors11)
+#dev.copy2pdf(file="figures/Individual2011Layers.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 
 ### basic bioclim modeling with PRISM 1929 layers for diploids then tetraploids
 # extract layer data for each point
@@ -68,6 +70,7 @@ dipBC9 <- bioclim(dipPts9)
 dipBCpredict9 <- predict(predictors9, dipBC9)
 # plot bioclim model
 plot(dipBCpredict9)
+#dev.copy2pdf(file="figures/BioclimDiploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 
 # extract layer data for each point
 tetraPts9 <- extract(predictors9, tetraploid)
@@ -77,6 +80,7 @@ tetraBC9 <- bioclim(tetraPts9)
 tetraBCpredict9 <- predict(predictors9, tetraBC9)
 # plot bioclim model
 plot(tetraBCpredict9)
+#dev.copy2pdf(file="figures/BioclimTetraploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 
 # extract layer data for each point for both cytotypes
 bothPts9 <- extract(predictors9, both)
@@ -86,13 +90,16 @@ bothBC9 <- bioclim(bothPts9)
 bothBCpredict9 <- predict(predictors9, bothBC9)
 # plot bioclim model
 plot(bothBCpredict9)
+#dev.copy2pdf(file="figures/BioclimBoth1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 
 ## Default maxent modeling
 # run maxent for diploid (default parameters for dismo)
 maxDip9 <- maxent(predictors9, diploid)
 maxDip9 # views results in browser window
 response(maxDip9) # show response curves for each layer
-rDip9 <- predict(maxDip9, predictors9) # create modelplot(rDip9) # plot predictive model
+rDip9 <- predict(maxDip9, predictors9) # create model
+plot(rDip9) # plot predictive model
+#dev.copy2pdf(file="figures/MaxDiploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(diploid) # add points to predictive model
 writeRaster(rDip9, "models/diploid1929.grd")
 
@@ -102,6 +109,7 @@ maxTetra9
 response(maxTetra9) 
 rTetra9 <- predict(maxTetra9, predictors9) 
 plot(rTetra9)
+#dev.copy2pdf(file="figures/MaxTetraploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid)
 writeRaster(rTetra9, "models/tetraploid1929.grd")
 
@@ -111,6 +119,7 @@ maxBoth9 # views results in browser window
 response(maxBoth9) # show response curves for each layer
 rBoth9 <- predict(maxBoth9, predictors9) # create model
 plot(rBoth9) # plot predictive model
+#dev.copy2pdf(file="figures/MaxBoth1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(both) # add points to predictive model
 writeRaster(rBoth9, "models/both1929.grd")
 
@@ -124,6 +133,7 @@ maxDipTrain9 <- maxent(predictors9, dipTrain9) #fit maxent model
 maxDipTrain9 #view results in html
 rDipTrain9 <- predict(maxDipTrain9, predictors9) #predict full model
 plot(rDipTrain9) #visualize full model
+#dev.copy2pdf(file="figures/AdvTrainDiploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(diploid) #add points to plot
 # testing model for diploid
 # extract background points
@@ -133,6 +143,7 @@ maxDipTest9 <- evaluate(maxDipTrain9, p=dipTest9, a=bg9, x=predictors9)
 maxDipTest9 #print results
 threshold(maxDipTest9) #identify threshold for presence or absence
 plot(maxDipTest9, 'ROC') #plot AUC
+#dev.copy2pdf(file="figures/AdvTestDiploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 # alternative methods for testing models (should give same answers)
 # Alternative 1: another way to test model for diploid
 pvtest9 <- data.frame(extract(predictors9, dipTest9))
@@ -164,6 +175,7 @@ maxDipAdv9 #view output as html
 response(maxDipAdv9) # show response curves for each layer
 rDipAdv9 <- predict(maxDipAdv9, predictors9) # create model
 plot(rDipAdv9) # plot predictive model
+#dev.copy2pdf(file="figures/AdvDiploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(diploid) # add points to predictive model
 writeRaster(rDipAdv9, "models/diploidAdv1929.grd")
 
@@ -176,6 +188,7 @@ maxTetraTrain9 <- maxent(predictors9, tetraTrain9) #fit maxent model
 maxTetraTrain9 #view results in html
 rTetraTrain9 <- predict(maxTetraTrain9, predictors9) #predict full model
 plot(rTetraTrain9) #visualize full model
+#dev.copy2pdf(file="figures/AdvTrainTetraploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid) #add points to plot
 # testing model for tetraploid
 # extract background points
@@ -185,6 +198,7 @@ maxTetraTest9 <- evaluate(maxTetraTrain9, p=tetraTest9, a=bg9, x=predictors9)
 maxTetraTest9 #print results
 threshold(maxTetraTest9) #identify threshold for presence or absence
 plot(maxTetraTest9, 'ROC') #plot AUC
+#dev.copy2pdf(file="figures/AdvTestTetraploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 # alternative methods for testing models (should give same answers)
 # Alternative 1: another way to test model for tetraploid
 pvtest9 <- data.frame(extract(predictors9, tetraTest9))
@@ -216,6 +230,7 @@ maxTetraAdv9 #view output as html
 response(maxTetraAdv9) # show response curves for each layer
 rTetraAdv9 <- predict(maxTetraAdv9, predictors9) # create model
 plot(rTetraAdv9) # plot predictive model
+#dev.copy2pdf(file="figures/AdvTetraploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid) # add points to predictive model
 writeRaster(rTetraAdv9, "models/tetraploidAdv1929.grd")
 
@@ -228,6 +243,7 @@ maxBothTrain9 <- maxent(predictors9, BothTrain9) #fit maxent model
 maxBothTrain9 #view results in html
 rBothTrain9 <- predict(maxBothTrain9, predictors9) #predict full model
 plot(rBothTrain9) #visualize full model
+#dev.copy2pdf(file="figures/AdvTrainBoth1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(both) #add points to plot
 # testing model for both cytotypes
 # extract background points
@@ -237,6 +253,7 @@ maxBothTest9 <- evaluate(maxBothTrain9, p=bothTest9, a=bg9, x=predictors9)
 maxBothTest9 #print results
 threshold(maxBothTest9) #identify threshold for presence or absence
 plot(maxBothTest9, 'ROC') #plot AUC
+#dev.copy2pdf(file="figures/AdvTestBoth1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 # alternative methods for testing models (should give same answers)
 # Alternative 1: another way to test model for both cytotypes
 pvtest9 <- data.frame(extract(predictors9, bothTest9))
@@ -268,6 +285,7 @@ maxBothAdv9 #view output as html
 response(maxBothAdv9) # show response curves for each layer
 rBothAdv9 <- predict(maxBothAdv9, predictors9) # create model
 plot(rBothAdv9) # plot predictive model
+#dev.copy2pdf(file="figures/AdvBoth1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid) # add points to predictive model
 writeRaster(rBothAdv9, "models/bothAdv1929.grd")
 
@@ -280,6 +298,7 @@ dipBC11 <- bioclim(dipPts11)
 dipBCpredict11 <- predict(predictors11, dipBC11)
 # plot bioclim model
 plot(dipBCpredict11)
+#dev.copy2pdf(file="figures/BioclimDiploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 
 # extract layer data for each point
 tetraPts11 <- extract(predictors11, tetraploid)
@@ -289,6 +308,7 @@ tetraBC11 <- bioclim(tetraPts11)
 tetraBCpredict11 <- predict(predictors11, tetraBC11)
 # plot bioclim model
 plot(tetraBCpredict11)
+#dev.copy2pdf(file="figures/BioclimTetraploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 
 # extract layer data for each point for both cytotypes
 bothPts11 <- extract(predictors11, both)
@@ -298,6 +318,7 @@ bothBC11 <- bioclim(bothPts11)
 bothBCpredict11 <- predict(predictors11, bothBC11)
 # plot bioclim model
 plot(bothBCpredict11)
+#dev.copy2pdf(file="figures/BioclimBoth2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 
 ## Default maxent modeling
 # run maxent for diploid (default parameters for dismo)
@@ -306,6 +327,7 @@ maxDip11 # views results in browser window
 response(maxDip11) # show response curves for each layer
 rDip11 <- predict(maxDip11, predictors11) # create model
 plot(rDip11) # plot predictive model
+#dev.copy2pdf(file="figures/MaxDiploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(diploid) # add points to predictive model
 writeRaster(rDip11, "models/diploid2011.grd")
 
@@ -315,6 +337,7 @@ maxTetra11
 response(maxTetra11) 
 rTetra11 <- predict(maxTetra11, predictors11) 
 plot(rTetra11)
+#dev.copy2pdf(file="figures/MaxTetraploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid)
 writeRaster(rTetra11, "models/tetraploid2011.grd")
 
@@ -324,6 +347,7 @@ maxBoth11 # views results in browser window
 response(maxBoth11) # show response curves for each layer
 rBoth11 <- predict(maxBoth11, predictors11) # create model
 plot(rBoth11) # plot predictive model
+#dev.copy2pdf(file="figures/MaxBoth2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(both) # add points to predictive model
 writeRaster(rBoth11, "models/both2011.grd")
 
@@ -337,6 +361,7 @@ maxDipTrain11 <- maxent(predictors11, dipTrain11) #fit maxent model
 maxDipTrain11 #view results in html
 rDipTrain11 <- predict(maxDipTrain11, predictors11) #predict full model
 plot(rDipTrain11) #visualize full model
+#dev.copy2pdf(file="figures/AdvTrainDiploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(diploid) #add points to plot
 # testing model for diploid
 # extract background points
@@ -346,6 +371,7 @@ maxDipTest11 <- evaluate(maxDipTrain11, p=dipTest11, a=bg11, x=predictors11)
 maxDipTest11 #print results
 threshold(maxDipTest11) #identify threshold for presence or absence
 plot(maxDipTest11, 'ROC') #plot AUC
+#dev.copy2pdf(file="figures/AdvTestDiploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 # alternative methods for testing models (should give same answers)
 # Alternative 1: another way to test model for diploid
 pvtest11 <- data.frame(extract(predictors11, dipTest11))
@@ -377,6 +403,7 @@ maxDipAdv11 #view output as html
 response(maxDipAdv11) # show response curves for each layer
 rDipAdv11 <- predict(maxDipAdv11, predictors11) # create model
 plot(rDipAdv11) # plot predictive model
+#dev.copy2pdf(file="figures/AdvDiploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(diploid) # add points to predictive model
 writeRaster(rDipAdv11, "models/diploidAdv2011.grd")
 
@@ -389,6 +416,7 @@ maxTetraTrain11 <- maxent(predictors11, tetraTrain11) #fit maxent model
 maxTetraTrain11 #view results in html
 rTetraTrain11 <- predict(maxTetraTrain11, predictors11) #predict full model
 plot(rTetraTrain11) #visualize full model
+#dev.copy2pdf(file="figures/AdvTrainTetraploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid) #add points to plot
 # testing model for tetraploid
 # extract background points
@@ -398,6 +426,7 @@ maxTetraTest11 <- evaluate(maxTetraTrain11, p=tetraTest11, a=bg11, x=predictors1
 maxTetraTest11 #print results
 threshold(maxTetraTest11) #identify threshold for presence or absence
 plot(maxTetraTest11, 'ROC') #plot AUC
+#dev.copy2pdf(file="figures/AdvTestTetraploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 # alternative methods for testing models (should give same answers)
 # Alternative 1: another way to test model for tetraploid
 pvtest11 <- data.frame(extract(predictors11, tetraTest11))
@@ -429,6 +458,7 @@ maxTetraAdv11 #view output as html
 response(maxTetraAdv11) # show response curves for each layer
 rTetraAdv11 <- predict(maxTetraAdv11, predictors11) # create model
 plot(rTetraAdv11) # plot predictive model
+#dev.copy2pdf(file="figures/AdvTetraploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid) # add points to predictive model
 writeRaster(rTetraAdv11, "models/tetraploidAdv2011.grd")
 
@@ -441,6 +471,7 @@ maxBothTrain11 <- maxent(predictors11, BothTrain11) #fit maxent model
 maxBothTrain11 #view results in html
 rBothTrain11 <- predict(maxBothTrain11, predictors11) #predict full model
 plot(rBothTrain11) #visualize full model
+#dev.copy2pdf(file="figures/AdvTrainBoth2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(both) #add points to plot
 # testing model for both cytotypes
 # extract background points
@@ -450,6 +481,7 @@ maxBothTest11 <- evaluate(maxBothTrain11, p=bothTest11, a=bg11, x=predictors11)
 maxBothTest11 #print results
 threshold(maxBothTest11) #identify threshold for presence or absence
 plot(maxBothTest11, 'ROC') #plot AUC
+#dev.copy2pdf(file="figures/AdvTestBoth2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 # alternative methods for testing models (should give same answers)
 # Alternative 1: another way to test model for both cytotypes
 pvtest11 <- data.frame(extract(predictors11, bothTest11))
@@ -481,5 +513,6 @@ maxBothAdv11 #view output as html
 response(maxBothAdv11) # show response curves for each layer
 rBothAdv11 <- predict(maxBothAdv11, predictors11) # create model
 plot(rBothAdv11) # plot predictive model
+#dev.copy2pdf(file="figures/AdvBoth2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid) # add points to predictive model
 writeRaster(rBothAdv11, "models/bothAdv2011.grd")
