@@ -467,7 +467,7 @@ fold <- kfold(both, k=5) #split occurence points into 5 sets
 bothTest11 <- both[fold == 1, ] #take 20% (1/5) for testing
 bothTrain11 <- both[fold != 1, ] #leave 40% for training
 # fit training model for both cytotypes
-maxBothTrain11 <- maxent(predictors11, BothTrain11) #fit maxent model
+maxBothTrain11 <- maxent(predictors11, bothTrain11) #fit maxent model
 maxBothTrain11 #view results in html
 rBothTrain11 <- predict(maxBothTrain11, predictors11) #predict full model
 plot(rBothTrain11) #visualize full model
