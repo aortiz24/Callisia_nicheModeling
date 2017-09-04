@@ -1,5 +1,5 @@
 ## evaluating niche overlap between cytotypes
-
+#load libraries
 library(dplyr)
 library(raster)
 library(dismo)
@@ -12,7 +12,7 @@ library(devtools)
 library(ggbiplot)
 
 ## multi-variate climate space comparisons (standard statistical testing, non-model based)
-# import occurrence data and convert to format required by maxent
+#import occurrence data and convert to format required by maxent
 Callisia.both <- read.csv(file="CallisiaCompletedData.csv") %>%
   dplyr::select(Cytotype,Latitude,Longitude)
 Callisia.both <- na.omit(Callisia.both)
