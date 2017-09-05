@@ -1,4 +1,4 @@
-# Callisia_nicheModeling
+# Callisia Niche Modeling
 
 Scripts for creating maps and performing niche modeling in RStudio.
 
