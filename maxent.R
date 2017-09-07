@@ -104,9 +104,9 @@ maxDipAdv9 <- maxent(
   )
 )
 maxDipAdv9 #view output as html
-dir.create("models/diploidHistMaxent")
+dir.create("models/diploid1929Maxent")
 # save output files
-file.copy(maxentHistHistDip@path, "models/diploidHistMaxent/", recursive=TRUE)
+file.copy(maxDipAdv9@path, "models/diploid1929Maxent/", recursive=TRUE)
 response(maxDipAdv9) # show response curves for each layer
 rDipAdv9 <- predict(maxDipAdv9, predictors9) # create model
 plot(rDipAdv9) # plot predictive model
@@ -126,10 +126,14 @@ maxTetraAdv9 <- maxent(
     'responsecurves=true', #default=false
     'replicates=10', #default=1
     'replicatetype=crossvalidate',
-    'maximumiterations=1000' #default=500
+    'maximumiterations=1000', #default=500
+    "-J" #jackknife = true
   )
 )
 maxTetraAdv9 #view output as html
+dir.create("models/tetraploid1929Maxent")
+# save output files
+file.copy(maxTetraAdv9@path, "models/tetraploid1929Maxent/", recursive=TRUE)
 response(maxTetraAdv9) # show response curves for each layer
 rTetraAdv9 <- predict(maxTetraAdv9, predictors9) # create model
 plot(rTetraAdv9) # plot predictive model
@@ -149,10 +153,14 @@ maxBothAdv9 <- maxent(
     'responsecurves=true', #default=false
     'replicates=10', #default=1
     'replicatetype=crossvalidate',
-    'maximumiterations=1000' #default=500
+    'maximumiterations=1000', #default=500
+    "-J" #jackknife = true
   )
 )
 maxBothAdv9 #view output as html
+dir.create("models/both929Maxent")
+# save output files
+file.copy(maxBothAdv9@path, "models/both1929Maxent/", recursive=TRUE)
 response(maxBothAdv9) # show response curves for each layer
 rBothAdv9 <- predict(maxBothAdv9, predictors9) # create model
 plot(rBothAdv9) # plot predictive model
@@ -204,10 +212,14 @@ maxDipAdv11 <- maxent(
     'responsecurves=true', #default=false
     'replicates=10', #default=1
     'replicatetype=crossvalidate',
-    'maximumiterations=1000' #default=500
+    'maximumiterations=1000', #default=500
+    "-J" #jackknife = true
   )
 )
 maxDipAdv11 #view output as html
+dir.create("models/diploid2011Maxent")
+# save output files
+file.copy(maxDipAdv11@path, "models/diploid2011Maxent/", recursive=TRUE)
 response(maxDipAdv11) # show response curves for each layer
 rDipAdv11 <- predict(maxDipAdv11, predictors11) # create model
 plot(rDipAdv11) # plot predictive model
@@ -227,10 +239,14 @@ maxTetraAdv11 <- maxent(
     'responsecurves=true', #default=false
     'replicates=10', #default=1
     'replicatetype=crossvalidate',
-    'maximumiterations=1000' #default=500
+    'maximumiterations=1000', #default=500
+    "-J" #jackknife = true
   )
 )
 maxTetraAdv11 #view output as html
+dir.create("models/tetraploid2011Maxent")
+# save output files
+file.copy(maxTetraAdv11@path, "models/tetraploid2011Maxent/", recursive=TRUE)
 response(maxTetraAdv11) # show response curves for each layer
 rTetraAdv11 <- predict(maxTetraAdv11, predictors11) # create model
 plot(rTetraAdv11) # plot predictive model
@@ -250,10 +266,14 @@ maxBothAdv11 <- maxent(
     'responsecurves=true', #default=false
     'replicates=10', #default=1
     'replicatetype=crossvalidate',
-    'maximumiterations=1000' #default=500
+    'maximumiterations=1000', #default=500
+    "-J" #jackknife = true
   )
 )
 maxBothAdv11 #view output as html
+dir.create("models/both2011Maxent")
+# save output files
+file.copy(maxBothAdv11@path, "models/both2011Maxent/", recursive=TRUE)
 response(maxBothAdv11) # show response curves for each layer
 rBothAdv11 <- predict(maxBothAdv11, predictors11) # create model
 plot(rBothAdv11) # plot predictive model
