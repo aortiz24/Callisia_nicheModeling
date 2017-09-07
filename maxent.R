@@ -99,10 +99,14 @@ maxDipAdv9 <- maxent(
     'responsecurves=true', #default=false
     'replicates=10', #default=1
     'replicatetype=crossvalidate',
-    'maximumiterations=1000' #default=500
+    'maximumiterations=1000', #default=500
+    "-J" #jackknife = true
   )
 )
 maxDipAdv9 #view output as html
+dir.create("models/diploidHistMaxent")
+# save output files
+file.copy(maxentHistHistDip@path, "models/diploidHistMaxent/", recursive=TRUE)
 response(maxDipAdv9) # show response curves for each layer
 rDipAdv9 <- predict(maxDipAdv9, predictors9) # create model
 plot(rDipAdv9) # plot predictive model
