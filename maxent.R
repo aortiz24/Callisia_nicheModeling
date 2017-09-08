@@ -158,7 +158,7 @@ maxBothAdv9 <- maxent(
   )
 )
 maxBothAdv9 #view output as html
-dir.create("models/both929Maxent")
+dir.create("models/both1929Maxent")
 # save output files
 file.copy(maxBothAdv9@path, "models/both1929Maxent/", recursive=TRUE)
 response(maxBothAdv9) # show response curves for each layer
