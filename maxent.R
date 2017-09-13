@@ -97,10 +97,11 @@ maxDipAdv9 <- maxent(
     'randomseed=true', #default=false
     'threads=2', #default=1
     'responsecurves=true', #default=false
-    'replicates=10', #default=1
+    'randomtestpoints=20', # using 80/20 split, occurrence points > 30
+    'replicates=1', #default=1 # using 80/20 split 
     'replicatetype=crossvalidate',
     'maximumiterations=1000', #default=500
-    "-J" #jackknife = true
+    "-J" #jackknife parameter
   )
 )
 maxDipAdv9 #view output as html
@@ -124,10 +125,11 @@ maxTetraAdv9 <- maxent(
     'randomseed=true', #default=false
     'threads=2', #default=1
     'responsecurves=true', #default=false
-    'replicates=10', #default=1
+    'randomtestpoints=20', # using 80/20 split, occurrence points > 30
+    'replicates=1', #default=1 # using 80/20 split 
     'replicatetype=crossvalidate',
     'maximumiterations=1000', #default=500
-    "-J" #jackknife = true
+    "-J" #jackknife parameter
   )
 )
 maxTetraAdv9 #view output as html
@@ -151,10 +153,11 @@ maxBothAdv9 <- maxent(
     'randomseed=true', #default=false
     'threads=2', #default=1
     'responsecurves=true', #default=false
-    'replicates=10', #default=1
+    'randomtestpoints=20', # using 80/20 split, occurrence points > 30
+    'replicates=1', #default=1 # using 80/20 split 
     'replicatetype=crossvalidate',
     'maximumiterations=1000', #default=500
-    "-J" #jackknife = true
+    "-J" #jackknife parameter
   )
 )
 maxBothAdv9 #view output as html
@@ -210,10 +213,11 @@ maxDipAdv11 <- maxent(
     'randomseed=true', #default=false
     'threads=2', #default=1
     'responsecurves=true', #default=false
-    'replicates=10', #default=1
+    'randomtestpoints=20', # using 80/20 split, occurrence points > 30
+    'replicates=1', #default=1 # using 80/20 split 
     'replicatetype=crossvalidate',
     'maximumiterations=1000', #default=500
-    "-J" #jackknife = true
+    "-J" #jackknife parameter
   )
 )
 maxDipAdv11 #view output as html
@@ -237,10 +241,11 @@ maxTetraAdv11 <- maxent(
     'randomseed=true', #default=false
     'threads=2', #default=1
     'responsecurves=true', #default=false
-    'replicates=10', #default=1
+    'randomtestpoints=20', # using 80/20 split, occurrence points > 30
+    'replicates=1', #default=1 # using 80/20 split 
     'replicatetype=crossvalidate',
     'maximumiterations=1000', #default=500
-    "-J" #jackknife = true
+    "-J" #jackknife parameter
   )
 )
 maxTetraAdv11 #view output as html
@@ -264,10 +269,11 @@ maxBothAdv11 <- maxent(
     'randomseed=true', #default=false
     'threads=2', #default=1
     'responsecurves=true', #default=false
-    'replicates=10', #default=1
+    'randomtestpoints=20', # using 80/20 split, occurrence points > 30
+    'replicates=1', #default=1 # using 80/20 split 
     'replicatetype=crossvalidate',
     'maximumiterations=1000', #default=500
-    "-J" #jackknife = true
+    "-J" #jackknife parameter
   )
 )
 maxBothAdv11 #view output as html
