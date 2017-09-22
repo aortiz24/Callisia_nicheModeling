@@ -14,4 +14,6 @@ The general workflow is:
 
 • `creatingPermutedCallisiaDatasets.R`: assessing the accuracy of identification of climatic determinants of a cytotype's range
 
+• `ResponseCurves.R`: creating figures that each have multiple response curve graphs representing each environmental layers included in each model constructed
+
 There are a number of files and directories that are downloaded or created during this analysis. To perform all commands in `layerPrep.R`, you should download the PRISM 1929 layers from [Recent Years](http://prism.oregonstate.edu/recent/) and the PRISM 2011 layers from [Historical Past](http://prism.oregonstate.edu/historical/). Store them in a convenient place (note the paths for using these layers may need to be changed). Clipped layers are included in `layers` for your convenience. A shapefile created in `mapping.R` is included in `shapefiles` for convenience. Models are included for both tetraploids and diploids for Callisia graminea in `models` for observation. Logistic Regression results are included in `logistic_regression_results` for observation.
