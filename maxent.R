@@ -11,8 +11,14 @@ library(maptools)
 library(dplyr)
 library(rJava)
 
-# create directory for saving models later
+# create directories for saving models later
 dir.create("models")
+dir.create("models/diploid1929Maxent")
+dir.create("models/tetraploid1929Maxent")
+dir.create("models/both1929Maxent")
+dir.create("models/diploid2011Maxent")
+dir.create("models/tetraploid2011Maxent")
+dir.create("models/both2011Maxent")
 
 ## import occurrence data and convert to format required by maxent
 Callisia.both <- read.csv(file="CallisiaCompletedData.csv") %>%
@@ -64,7 +70,7 @@ rDip9 <- predict(maxDip9, predictors9) # create model
 plot(rDip9) # plot predictive model
 #dev.copy2pdf(file="figures/MaxDiploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(diploid) # add points to predictive model
-writeRaster(rDip9, "models/diploid1929.grd")
+writeRaster(rDip9, "models/diploid1929Maxent/diploid1929.grd")
 
 # run maxent for tetraploid (default parameters for dismo)
 maxTetra9 <- maxent(predictors9, tetraploid) 
@@ -74,7 +80,7 @@ rTetra9 <- predict(maxTetra9, predictors9)
 plot(rTetra9)
 #dev.copy2pdf(file="figures/MaxTetraploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid)
-writeRaster(rTetra9, "models/tetraploid1929.grd")
+writeRaster(rTetra9, "models/tetraploid1929Maxent/tetraploid1929.grd")
 
 # run maxent for both cytotypes (default parameters for dismo)
 maxBoth9 <- maxent(predictors9, both)
@@ -84,7 +90,7 @@ rBoth9 <- predict(maxBoth9, predictors9) # create model
 plot(rBoth9) # plot predictive model
 #dev.copy2pdf(file="figures/MaxBoth1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(both) # add points to predictive model
-writeRaster(rBoth9, "models/both1929.grd")
+writeRaster(rBoth9, "models/both1929Maxent/both1929.grd")
 
 ## Advanced modeling
 # maxent with jackknife, random seed, and response curves, followed by cross
@@ -113,7 +119,7 @@ rDipAdv9 <- predict(maxDipAdv9, predictors9) # create model
 plot(rDipAdv9) # plot predictive model
 #dev.copy2pdf(file="figures/AdvDiploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(diploid) # add points to predictive model
-writeRaster(rDipAdv9, "models/diploidAdv1929.grd")
+writeRaster(rDipAdv9, "models/diploid1929Maxent/diploidAdv1929.grd")
 
 # maxent with jackknife, random seed, and response curves, followed by cross-validation
 maxTetraAdv9 <- maxent(
@@ -133,7 +139,7 @@ maxTetraAdv9 <- maxent(
   )
 )
 maxTetraAdv9 #view output as html
-dir.create("models/tetraploid1929Maxent")
+dir.create("models/tetraploid1929Maxent/tetraploid1929Maxent")
 # save output files
 file.copy(maxTetraAdv9@path, "models/tetraploid1929Maxent/", recursive=TRUE)
 response(maxTetraAdv9) # show response curves for each layer
@@ -141,7 +147,7 @@ rTetraAdv9 <- predict(maxTetraAdv9, predictors9) # create model
 plot(rTetraAdv9) # plot predictive model
 #dev.copy2pdf(file="figures/AdvTetraploid1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid) # add points to predictive model
-writeRaster(rTetraAdv9, "models/tetraploidAdv1929.grd")
+writeRaster(rTetraAdv9, "models/tetraploid1929Maxent/tetraploidAdv1929.grd")
 
 # maxent with jackknife, random seed, and response curves, followed by cross
 maxBothAdv9 <- maxent(
@@ -169,7 +175,7 @@ rBothAdv9 <- predict(maxBothAdv9, predictors9) # create model
 plot(rBothAdv9) # plot predictive model
 #dev.copy2pdf(file="figures/AdvBoth1929.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid) # add points to predictive model
-writeRaster(rBothAdv9, "models/bothAdv1929.grd")
+writeRaster(rBothAdv9, "models/both1929Maxent/bothAdv1929.grd")
 
 ## Default maxent modeling
 # run maxent for diploid (default parameters for dismo)
@@ -180,7 +186,7 @@ rDip11 <- predict(maxDip11, predictors11) # create model
 plot(rDip11) # plot predictive model
 #dev.copy2pdf(file="figures/MaxDiploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(diploid) # add points to predictive model
-writeRaster(rDip11, "models/diploid2011.grd")
+writeRaster(rDip11, "models/diploid2011Maxent/diploid2011.grd")
 
 # run maxent for tetraploid (default parameters for dismo)
 maxTetra11 <- maxent(predictors11, tetraploid) 
@@ -190,7 +196,7 @@ rTetra11 <- predict(maxTetra11, predictors11)
 plot(rTetra11)
 #dev.copy2pdf(file="figures/MaxTetraploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid)
-writeRaster(rTetra11, "models/tetraploid2011.grd")
+writeRaster(rTetra11, "models/tetraploid2011Maxent/tetraploid2011.grd")
 
 # run maxent for both cytotypes (default parameters for dismo)
 maxBoth11 <- maxent(predictors11, both)
@@ -200,7 +206,7 @@ rBoth11 <- predict(maxBoth11, predictors11) # create model
 plot(rBoth11) # plot predictive model
 #dev.copy2pdf(file="figures/MaxBoth2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(both) # add points to predictive model
-writeRaster(rBoth11, "models/both2011.grd")
+writeRaster(rBoth11, "models/both2011Maxent/both2011.grd")
 
 ## Advanced modeling
 # maxent with jackknife, random seed, and response curves, followed by cross
@@ -229,7 +235,7 @@ rDipAdv11 <- predict(maxDipAdv11, predictors11) # create model
 plot(rDipAdv11) # plot predictive model
 #dev.copy2pdf(file="figures/AdvDiploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(diploid) # add points to predictive model
-writeRaster(rDipAdv11, "models/diploidAdv2011.grd")
+writeRaster(rDipAdv11, "models/diploid2011Maxent/diploidAdv2011.grd")
 
 # maxent with jackknife, random seed, and response curves, followed by cross-validation
 maxTetraAdv11 <- maxent(
@@ -257,7 +263,7 @@ rTetraAdv11 <- predict(maxTetraAdv11, predictors11) # create model
 plot(rTetraAdv11) # plot predictive model
 #dev.copy2pdf(file="figures/AdvTetraploid2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid) # add points to predictive model
-writeRaster(rTetraAdv11, "models/tetraploidAdv2011.grd")
+writeRaster(rTetraAdv11, "models/tetraploid2011Maxent/tetraploidAdv2011.grd")
 
 # maxent with jackknife, random seed, and response curves, followed by cross
 maxBothAdv11 <- maxent(
@@ -285,4 +291,4 @@ rBothAdv11 <- predict(maxBothAdv11, predictors11) # create model
 plot(rBothAdv11) # plot predictive model
 #dev.copy2pdf(file="figures/AdvBoth2011.pdf", width = 7, height = 5) #save plot as pdf to the figures directory
 points(tetraploid) # add points to predictive model
-writeRaster(rBothAdv11, "models/bothAdv2011.grd")
+writeRaster(rBothAdv11, "models/both2011Maxent/bothAdv2011.grd")

@@ -190,18 +190,18 @@ ggbiplot(pca_both11, obs.scale =1, var.scale = 1, groups= cytotypes11, ellipse =
 
 ## model-based approaches
 # read in default maxent models
-rDip9 <- raster("models/diploid1929.grd")
-rTetra9 <- raster("models/tetraploid1929.grd")
-rBoth9<- raster("models/both1929.grd")
+rDip9 <- raster("models/diploid1929Maxent/diploid1929.grd")
+rTetra9 <- raster("models/tetraploid1929Maxent/tetraploid1929.grd")
+rBoth9<- raster("models/both1929Maxent/both1929.grd")
 
 # assessing niche overlap by comparing diploids and tetraploids in 1929
 nicheOverlap(rDip9, rTetra9, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rDip9, rTetra9, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
 
 # read in advanced maxent models
-rDipAdv9 <- raster("models/diploidAdv1929.grd")
-rTetraAdv9 <- raster("models/tetraploidAdv1929.grd")
-rBothAdv9 <- raster("models/bothAdv1929.grd")
+rDipAdv9 <- raster("models/diploid1929Maxent/diploidAdv1929.grd")
+rTetraAdv9 <- raster("models/tetraploid1929Maxent/tetraploidAdv1929.grd")
+rBothAdv9 <- raster("models/both1929Maxent/bothAdv1929.grd")
 
 # assessing niche overlap by comparing diploids and tetraploids in 1929
 nicheOverlap(rDipAdv9, rTetraAdv9, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
@@ -210,18 +210,18 @@ nicheOverlap(rDipAdv9, rTetraAdv9, stat='I', mask=TRUE, checkNegatives=TRUE) # I
 
 ## model-based approaches
 # read in default maxent models
-rDip11 <- raster("models/diploid2011.grd")
-rTetra11 <- raster("models/tetraploid2011.grd")
-rBoth11<- raster("models/both2011.grd")
+rDip11 <- raster("models/diploid2011Maxent/diploid2011.grd")
+rTetra11 <- raster("models/tetraploid2011Maxent/tetraploid2011.grd")
+rBoth11<- raster("models/both2011Maxent/both2011.grd")
 
 # assessing niche overlap by comparing diploids and tetraploids in 2011
 nicheOverlap(rDip11, rTetra11, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
 nicheOverlap(rDip11, rTetra11, stat='I', mask=TRUE, checkNegatives=TRUE) # I statistic
 
 # read in advanced maxent models
-rDipAdv11 <- raster("models/diploidAdv2011.grd")
-rTetraAdv11 <- raster("models/tetraploidAdv2011.grd")
-rBothAdv11 <- raster("models/bothAdv2011.grd")
+rDipAdv11 <- raster("models/diploid2011Maxent/diploidAdv2011.grd")
+rTetraAdv11 <- raster("models/tetraploid2011Maxent/tetraploidAdv2011.grd")
+rBothAdv11 <- raster("models/both2011Maxent/bothAdv2011.grd")
 
 # assessing niche overlap by comparing diploids and tetraploids in 2011
 nicheOverlap(rDipAdv11, rTetraAdv11, stat='D', mask=TRUE, checkNegatives=TRUE) # D statistic
