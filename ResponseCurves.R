@@ -5,6 +5,7 @@ tDip1 <- response(maxDipAdv9, var = 1) #mean temperature
 pDip2 <- response(maxDipAdv9, var = 2) #precipitation
 vDip3 <- response(maxDipAdv9, var = 3) #maximum vapor pressure deficit
 
+#The exported image is elongated, use the 'Export' button under the global environment to export the image at custom length & height
 #open png file
 png(filename="figures/diploids_response_curves_1929.png")
 # combined figure
@@ -15,7 +16,7 @@ plot(tDip1, type = "l", col="red", lwd=5, ylim=c(0,1), ylab = "Habitat Suitabili
 plot(pDip2, type = "l", col="red", lwd=5, ylim=c(0,1), ylab = "Habitat Suitability", xlab = "Precipitation (mm)", main = "(b)")
 #plot maximum vapor pressure deficit layer
 plot(vDip3, type = "l", col="red", lwd=5, ylim=c(0,1), ylab = "Habitat Suitability", xlab = "Maximum Vapor Pressure Deficit", main = "(c)")
-dev.off()
+dev.off()  
 
 ##Tetraploids 1929 - model must be loaded
 # create objects for each variable in model
@@ -23,6 +24,7 @@ tTetra1 <- response(maxTetraAdv9, var = 1) #mean temperature
 pTetra2 <- response(maxTetraAdv9, var = 2) #precipitation
 vTetra3 <- response(maxTetraAdv9, var = 3) #maximum vapor pressure deficit
 
+#The exported image is elongated, use the 'Export' button under the global environment to export the image at custom length & height
 #open png file
 png(filename="figures/tetraploids_response_curves_1929.png")
 # combined figure
@@ -41,6 +43,7 @@ tBoth1 <- response(maxBothAdv9, var = 1) #mean temperature
 pBoth2 <- response(maxBothAdv9, var = 2) #precipitation
 vBoth3 <- response(maxBothAdv9, var = 3) #maximum vapor pressure deficit
 
+#The exported image is elongated, use the 'Export' button under the global environment to export the image at custom length & height
 #open png file
 png(filename="figures/BothCytotypes_response_curves_1929.png")
 # combined figure
@@ -60,6 +63,7 @@ pDip2 <- response(maxDipAdv11, var = 2) #precipitation
 vDip3 <- response(maxDipAdv11, var = 3) #minimum vapor pressure deficit
 dDip4 <- response(maxDipAdv11, var = 4) #mean dewpoint temperature
 
+#The exported image is elongated, use the 'Export' button under the global environment to export the image at custom length & height
 #open png file
 png(filename="figures/diploids_response_curves_2011.png")
 # combined figure
@@ -81,6 +85,7 @@ pTetra2 <- response(maxTetraAdv11, var = 2) #precipitation
 vTetra3 <- response(maxTetraAdv11, var = 3) #minimum vapor pressure deficit
 dTetra4 <- response(maxTetraAdv11, var = 4) #mean dewpoint temperature
 
+#The exported image is elongated, use the 'Export' button under the global environment to export the image at custom length & height
 #open png file
 png(filename="figures/tetraploids_response_curves_2011.png")
 # combined figure
@@ -102,6 +107,7 @@ pBoth2 <- response(maxBothAdv11, var = 2) #precipitation
 vBoth3 <- response(maxBothAdv11, var = 3) #minimum vapor pressure deficit
 dBoth4 <- response(maxBothAdv11, var = 4) #mean dewpoint temperature
 
+#The exported image is elongated, use the 'Export' button under the global environment to export the image at custom length & height
 #open png file
 png(filename="figures/BothCytotypes_response_curves_2011.png")
 # combined figure
